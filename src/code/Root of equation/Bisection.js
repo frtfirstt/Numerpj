@@ -150,6 +150,7 @@ class Bisection extends Component {
     
     dataapi = async()=>{
             var response = await axios.get('http://localhost:3001/api/users/showbisec').then(res => {return res.data});
+            // console.log(response)
             this.setState({
                 fx:response['data'][0]['fx'],
                 xl:response['data'][0]['xl'],

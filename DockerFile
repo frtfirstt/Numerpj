@@ -1,0 +1,4 @@
+FROM baseImage
+WORKDIR /the/workdir/path
+RUN npm install
+COPY . .

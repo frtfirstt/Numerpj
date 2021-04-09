@@ -1,0 +1,1 @@
+{"_id":{"$oid":"5e7a20f73e09615feceff5fa"},"fx":"(x*x)+2*x+1","start":{"$numberInt":"2"},"finish":{"$numberInt":"5"},"__v":{"$numberInt":"0"}}

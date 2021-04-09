@@ -1,0 +1,3 @@
+{"_id":{"$oid":"5e7a463d7e22bd5444a4ad84"},"fx":"(x*x)+2*x+3*(x*x*x)+7","a":{"$numberInt":"2"},"b":{"$numberInt":"2"},"n":{"$numberInt":"3"},"__v":{"$numberInt":"0"}}
+{"_id":{"$oid":"5e7a46577e22bd5444a4ad85"},"fx":"(x*x)+7*x+21*(x)+9","a":{"$numberInt":"3"},"b":{"$numberInt":"3"},"n":{"$numberInt":"5"},"__v":{"$numberInt":"0"}}
+{"_id":{"$oid":"5e7a4fed00e4ca610c9b9596"},"fx":"(x*x)+7*x+21*(x)+9","a":{"$numberInt":"2"},"b":{"$numberInt":"3"},"n":{"$numberInt":"6"},"__v":{"$numberInt":"0"}}
