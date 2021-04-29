@@ -6,13 +6,15 @@ import 'antd/dist/antd.css';
 import {  compile } from 'mathjs';
 import axios from 'axios';
 
+
 const InputColor = {
-    background: "#bae7ff",
+    background: "",
     color: "#003a8c", 
     fontWeight: "bold", 
     fontSize: "24px",
     width: 300 ,
     height:50
+    
 
 };
 var schedule = []
@@ -109,27 +111,27 @@ class Onepoint extends Component {
     }
     render() {
         return(
-            <body style={{ background: "#bae7ff", padding: "90px" , float:"left"}}>
-                <h2 style={{color: "#003a8c", fontWeight: "bold",fontSize: "35px"}}>One Point Iteration</h2>
-                <div>
+            <body style={{ background: "#ebe18d", padding: "90px" , float:"left"}}>
+                 <h2 style={{color: "#003a8c", fontWeight: "bold",fontSize: "35px",textAlign:"center"}}>OnePoint</h2>
+                <div style={{textAlign:"center"}}>
                     <Card
                     
                     bordered={true}
-                    style={{ width: 700 ,height:600, background: "#40a9ff", color: "#FFFFFFFF", float:"Auto"}}
+                    style={{ width: 1500 ,height:600, background: "#ebe18d", color: "#FFFFFFFF", float:"Auto"}}
                     onChange={this.handleChange}
                     >
-                        <h2>f(x)</h2><Input size="large" name="fx"  placeholder={"Input f(x)"} style={InputColor}></Input><br/><br/><br/><br/>
+                        <h2>f(x)</h2><Input size="large" name="fx"   style={InputColor}></Input><br/><br/><br/><br/>
                         <h2>X<sub>0</sub></h2><Input size="large" name="x0" style={InputColor}></Input><br/><br/><br/><br/>
                         <Button id="submit_button" onClick= {
                                 ()=>this.onepoint(parseFloat(this.state.x0))
                             }  
-                        style={{width: 150 , height:50,background: "#4caf50", color: "white", fontSize: "30px"}}>Submit</Button>
+                            style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}>GO</Button>&nbsp;&nbsp;&nbsp;&nbsp;
 
                         <Button id="submit_button" onClick= {
                                 
                                 ()=>this.dataapi()
                         }  
-                        style={{width: 150 , height:50,background: "#4caf50", color: "white", fontSize: "30px"}}>API</Button>
+                        style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}>API</Button>
                         
                     </Card>
                     

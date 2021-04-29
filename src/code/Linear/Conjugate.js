@@ -6,11 +6,14 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'r
 import { Layout, Breadcrumb } from 'antd';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 const { Header, Content, Footer, Sider } = Layout;
-const InputStyle = {
-    background: "#f58216",
-    color: "white",
-    fontWeight: "bold",
-    fontSize: "24px"
+const InputColor = {
+    background: "",
+    color: "#003a8c", 
+    fontWeight: "bold", 
+    fontSize: "24px",
+    width: 300 ,
+    height:50
+    
 
 };
 var A = [], B = [], matrixA = [], matrixB = [], matrixX = [], x, epsilon, dataInTable = [], count = 1, output
@@ -70,15 +73,16 @@ class Conjugate extends Component {
         return true;
     }
 
-    conjugate_gradient() {
+    conjugate_gradient(row) {
         this.initMatrix();
-        if (!this.positive_definite(1)) {
-            output = "This matrix doesn't positive definite"
-            this.setState({
-                showOutputCard: true
-            });
-            return false;
-        }
+        // if (!this.positive_definite(row)) {
+        //     output = "This matrix doesn't positive definite"
+        //     console.log("b");
+        //     this.setState({
+        //         showOutputCard: true
+        //     });
+        //     return false;
+        // }
         //find {R0}
         var R = subtract(multiply(A, x), B);
         console.log(R)
@@ -122,7 +126,6 @@ class Conjugate extends Component {
         matrixB = []
         matrixX = []
         x = []
-        dataInTable = []
         for (var i = 1; i <= row; i++) {
             for (var j = 1; j <= column; j++) {
                 matrixA.push(<Input style={{
@@ -167,6 +170,7 @@ class Conjugate extends Component {
             showMatrixForm: true,
             showMatrixButton: true
         })
+        console.log(matrixA);
 
 
 
@@ -174,14 +178,17 @@ class Conjugate extends Component {
     initMatrix() {
         for (var i = 0; i < this.state.row; i++) {
             A[i] = []
+            
             for (var j = 0; j < this.state.column; j++) {
-                A[i][j] = (parseFloat(document.getElementById("a" + (i + 1) + "" + (j + 1)).value));
+                // console.log(parseFloat(document.getElementById("x" + (i + 1)).value))
+                A[i][j] = parseFloat(document.getElementById("a" + (i + 1) + "" + (j + 1)).value)
             }
             B.push(parseFloat(document.getElementById("b" + (i + 1)).value));
             x.push(parseFloat(document.getElementById("x" + (i + 1)).value));
         }
     }
     appendTable(lambda, x, error) {
+        console.log(dataInTable)
         dataInTable.push({
             iteration: count++,
             lambda: lambda,
@@ -200,14 +207,8 @@ class Conjugate extends Component {
         return (
             <Router>
                 <Layout>
-                    <Content
-                        style={{
-                            background: '#FFCC66',
-                            padding: 24,
-                            margin: 30,
-                            minHeight: 280,
-                            fontSize: 24
-                        }}
+                <body
+                        style={{ background: "#ebe18d", padding: "90px" , float:"left" }}
                         onChange={this.handleChange}
                     >
 
@@ -222,10 +223,11 @@ class Conjugate extends Component {
                                     <h2>Row</h2><Input size="large" name="row" ></Input>
                                     <h2>Column</h2><Input size="large" name="column" ></Input>
                                 </div>
+                                <br></br>
                                 {this.state.showDimentionButton &&
                                     <Button id="dimention_button" onClick={
                                         () => { this.createMatrix(this.state.row, this.state.column) }
-                                    }
+                                    } style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}
                                     >
                                         Submit<br></br>
                                     </Button>
@@ -234,12 +236,13 @@ class Conjugate extends Component {
                                 {this.state.showMatrixButton &&
                                     <Button
                                         id="matrix_button"
-                                        onClick={()=>this.conjugate_gradient(parseInt(this.state.row))}>
+                                        onClick={()=>this.conjugate_gradient(parseInt(this.state.row))} style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}>
                                         Submit
                                     </Button>
                                 }
                             </Col>
                         </Row>
+                        <br></br>
                         <Row gutter={[40, 40]}>
                             <Col span={8} offset={4}>
                                 <Card
@@ -255,12 +258,20 @@ class Conjugate extends Component {
                                     {this.state.showMatrixForm && <div>{matrixB}</div>}
                                 </Card>
                             </Col>
+                            <Col span={8}>
+                                <Card
+                                    title={<h3>Vector</h3>}
+                                >
+                                    {this.state.showMatrixForm && <div>{matrixX}</div>}
+                                </Card>
+                            </Col>
                         </Row>
                         <br></br>
 
                         {/*---------------------------------------------------------------------------------------------*/}
                         <Row gutter={[2, 2]}>
                             <Col span={10} offset={7}>
+                            {this.state.showOutputCard &&
                                 <Card
                                     title={<h3>Outpot</h3>}
                                     bordered={true}
@@ -268,9 +279,10 @@ class Conjugate extends Component {
                                     <Table columns={columns} dataSource={dataInTable} bordered={true} bodyStyle={{ fontWeight: "bold", fontSize: "18px", color: "black", overflowX: "scroll" }}
                                     ></Table>
                                 </Card>
+                            }
                             </Col>
                         </Row>
-                    </Content>
+                    </body>
                 </Layout>
             </Router>
         );

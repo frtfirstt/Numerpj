@@ -6,12 +6,16 @@ import { Layout, Breadcrumb } from 'antd';
 import { range, compile, lusolve, format ,det} from 'mathjs';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import axios from 'axios';
 const { Header, Content, Footer, Sider } = Layout;
-const InputStyle = {
-    background: "#f58216",
-    color: "white",
-    fontWeight: "bold",
-    fontSize: "24px"
+const InputColor = {
+    background: "",
+    color: "#003a8c", 
+    fontWeight: "bold", 
+    fontSize: "24px",
+    width: 300 ,
+    height:50
+    
 
 };
 var A = [], B = [], answer = [], matrixA = [], matrixB = []
@@ -34,6 +38,34 @@ class Cramerrule extends Component {
 
     cramer() {
         this.initMatrix();
+        var counter = 0;
+        // eslint-disable-next-line eqeqeq
+        while (counter != this.state.row) {
+            var transformMatrix = JSON.parse(JSON.stringify(A));//Deep copy
+            for (var i = 0; i < this.state.row; i++) {
+                for (var j = 0; j < this.state.column; j++) {
+                    if (j === counter) {
+                        transformMatrix[i][j] = B[i]
+                        break;
+                    }
+
+                }
+
+            }
+            counter++;
+            answer.push(<h2>X<sub>{counter}</sub>=&nbsp;&nbsp;{Math.round(det(transformMatrix)) / Math.round(det(A))}</h2>)
+            answer.push(<br />)
+
+
+
+        }
+        this.setState({
+            showOutputCard: true
+        });
+
+
+    }
+    cramer2() {
         var counter = 0;
         // eslint-disable-next-line eqeqeq
         while (counter != this.state.row) {
@@ -106,6 +138,19 @@ class Cramerrule extends Component {
             B.push(parseFloat(document.getElementById("b" + (i + 1)).value));
         }
     }
+    dataapi = async()=>{
+        var response = await axios.get('http://localhost:3000/GuassElimination').then(res => {return res.data});
+        console.log(response)
+        this.setState({
+            A:response['A'],
+            B:response['B'],
+            row:response['row']
+        })
+        A = this.state.A;
+        B = this.state.B;
+        this.cramer2(this.state.row);
+        
+    }
     handleChange(event) {
         this.setState({
             [event.target.name]: event.target.value
@@ -115,16 +160,11 @@ class Cramerrule extends Component {
         return (
             <Router>
                 <Layout>
-                    <Content
-                        style={{
-                            background: '#FFCC66',
-                            padding: 24,
-                            margin: 30,
-                            minHeight: 280,
-                            fontSize: 24
-                        }}
+                    <body
+                        style={{ background: "#ebe18d", padding: "90px" , float:"left" }}
                         onChange={this.handleChange}
                     >
+                     <h2 style={{color: "#003a8c", fontWeight: "bold",fontSize: "35px",textAlign:"center"}}>Cramer's rule</h2>
                         {/*-----------------------------------------ปุ่มINPUTสมการ----------------------------------------------------*/}
                         <Row gutter={[40, 40]}
                             bordered={true}
@@ -136,11 +176,13 @@ class Cramerrule extends Component {
                                     <h2>Row</h2><Input size="large" name="row" ></Input>
                                     <h2>Column</h2><Input size="large" name="column" ></Input>
                                 </div>
+                                <br></br>
                                 {this.state.showDimentionButton &&
+                                    
                                     <Button id="dimention_button" onClick={
                                         () => this.createMatrix(this.state.row, this.state.column)
                                     }
-                                    >
+                                    style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}>
                                         Submit<br></br>
                                     </Button>
                                 }
@@ -148,12 +190,20 @@ class Cramerrule extends Component {
                                 {this.state.showMatrixButton &&
                                     <Button
                                         id="matrix_button"
-                                        onClick={()=>this.cramer()}>
+                                        onClick={()=>this.cramer()} style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}>
                                         Submit
                                     </Button>
                                 }
+
+                                <Button id="submit_button" onClick= {
+                                
+                                ()=>this.dataapi()
+                                 }  
+                                 style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}>API</Button>
+                                
                             </Col>
                         </Row>
+                        <br></br>
                         <Row gutter={[40, 40]}>
                             <Col span={8} offset={4}>
                                 <Card
@@ -175,14 +225,14 @@ class Cramerrule extends Component {
                         <Row gutter={[2, 2]}>
                             <Col span={10} offset={7}>
                                 <Card
-                                    title={<h3>Outpot</h3>}
+                                    title={<h3>Output</h3>}
                                     bordered={true}
                                     onChange={this.handleChange} id="answerCard">
                                     <p style={{ fontSize: "24px", fontWeight: "bold" }}>{answer}</p>
                                 </Card>
                             </Col>
                         </Row>
-                    </Content>
+                    </body>
                 </Layout>
             </Router>
         );

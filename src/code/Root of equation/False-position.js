@@ -6,12 +6,13 @@ import {  compile } from 'mathjs';
 import axios from 'axios';
 
 const InputColor = {
-    background: "#bae7ff",
+    background: "",
     color: "#003a8c", 
     fontWeight: "bold", 
     fontSize: "24px",
     width: 300 ,
     height:50
+    
 
 };
 var schedule = []
@@ -135,32 +136,32 @@ class FalsePosition extends Component {
         });
     }
     dataapi = async()=>{
-        var response = await axios.get('http://localhost:3001/api/users/showfalsee').then(res => {return res.data});
+        var response = await axios.get('http://localhost:3000/false-position').then(res => {return res.data});
         this.setState({
-            fx:response['data'][0]['fx'],
-            xl:response['data'][0]['xl'],
-            xr:response['data'][0]['xr']
+            fx:response['fx'],
+            xl:response['xl'],
+            xr:response['xr']
         })
         this.false_position(this.state.xl,this.state.xr);
     }
     render() {
         return(
-            <body style={{ background: "#bae7ff", padding: "90px" , float:"left" }}>
-                <h2 style={{color: "#003a8c", fontWeight: "bold",fontSize: "35px"}}>False Position</h2>
-                <div style={{float:"left"}}>
+            <body style={{ background: "#ebe18d", padding: "90px" , float:"left" }}>
+                <h2 style={{color: "#003a8c", fontWeight: "bold",fontSize: "35px",textAlign:"center"}}>FalsePosition</h2>
+                <div style={{textAlign:"center"}}>
                     <Card
                     
                     bordered={true}
-                    style={{ width: 700 ,height:600, background: "#40a9ff", color: "#FFFFFFFF", float:"Auto"}}
+                    style={{ width: 1500 ,height:600, background: "#ebe18d", float:"Auto" ,margin:"auto"}}
                     onChange={this.handleChange}
                     >
-                        <h2>f(x)</h2><Input size="large" name="fx"  placeholder={"Input f(x)"}  style={InputColor}></Input><br/><br/><br/><br/>
+                        <h2>f(x)</h2><Input size="large" name="fx"   style={InputColor}></Input><br/><br/><br/><br/>
                         <h2>X<sub>L</sub></h2><Input size="large" name="xl" style={InputColor}></Input><br/><br/><br/><br/>
                         <h2>X<sub>R</sub></h2><Input size="large" name="xr" style={InputColor}></Input><br/><br/><br/><br/>
                         <Button id="submit_button" onClick= {
                                 ()=>this.false_position(parseFloat(this.state.xl), parseFloat(this.state.xr))
                             }  
-                        style={{width: 150 , height:50,background: "#4caf50", color: "white", fontSize: "30px"}}>Submit</Button>
+                            style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}>GO</Button>&nbsp;&nbsp;&nbsp;&nbsp;
 
                         <Button id="submit_button" onClick= {
                                 
@@ -168,7 +169,7 @@ class FalsePosition extends Component {
                                 
                                 
                         }  
-                        style={{width: 150 , height:50,background: "#4caf50", color: "white", fontSize: "30px"}}>API</Button>
+                        style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}>API</Button>
                         
                     </Card>
                     

@@ -6,12 +6,16 @@ import { Layout, Breadcrumb } from 'antd';
 import { range, compile, lusolve, format, det, subtract, multiply, transpose, add,inv,fraction } from 'mathjs';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import axios from 'axios';
 const { Header, Content, Footer, Sider } = Layout;
-const InputStyle = {
-    background: "#f58216",
-    color: "white",
-    fontWeight: "bold",
-    fontSize: "24px"
+const InputColor = {
+    background: "",
+    color: "#003a8c", 
+    fontWeight: "bold", 
+    fontSize: "24px",
+    width: 300 ,
+    height:50
+    
 
 };
 var A = [], B = [], matrixA = [], matrixB = [], output = []
@@ -88,6 +92,60 @@ class Appc8 extends Component {
 
       
     }
+    jordan2(n) {
+        if (A[0][0] === 0) { //pivoting
+            var tempRow = JSON.parse(JSON.stringify(A[0]));
+            var tempColumn = B[0];
+            A[0] = A[1];
+            A[1] = tempRow;
+            B[0] = B[1];
+            B[1] = tempColumn;
+        }
+        //Forward eliminate
+        for(var k=0 ; k<n ; k++) {
+            for(var i=k+1 ; i<n ; i++) {
+                var factor = A[i][k] / A[k][k];
+                for (var j=k ; j<n ; j++) {
+                    A[i][j] = A[i][j] - factor*A[k][j];
+                }
+                B[i] = B[i] - factor*B[k];
+
+            }
+        }
+        //Backward Substitution
+        for (k=n-1 ; k>=0 ; k--) {
+            for(i=k ; i>=0 ; i--) {
+                
+                if (i === k) {//Identity matrix
+                    factor = 1 / A[i][k];
+            
+                    for (j=0 ; j<n ; j++) {
+                        A[i][j] = A[i][j] * factor;
+                    }
+                    B[i] = B[i] * factor;
+                
+                
+                }
+                else {
+                    factor = A[i][k] / A[k][k];
+                    for (j=0 ; j<n ; j++) {
+                        A[i][j] = A[i][j] - factor*A[k][j];
+                    }
+                    B[i] = B[i] - factor*B[k];
+                }
+            } 
+        }
+        for (i=0 ; i<n ; i++) {
+            output.push(B[i]);
+            output.push(<br/>)
+        }
+        this.setState({
+            showOutputCard: true
+        });
+
+      
+    }
+
     createMatrix(row, column) {
         for (var i=1 ; i<=row ; i++) {
             for (var j=1 ; j<=column ; j++) {
@@ -135,6 +193,19 @@ class Appc8 extends Component {
             B.push(parseFloat(document.getElementById("b"+(i+1)).value));
         }
     }
+    dataapi = async()=>{
+        var response = await axios.get('http://localhost:3000/GuassElimination').then(res => {return res.data});
+        console.log(response)
+        this.setState({
+            A:response['A'],
+            B:response['B'],
+            row:response['row']
+        })
+        A = this.state.A;
+        B = this.state.B;
+        this.jordan2(this.state.row);
+        
+    }
 
     handleChange(event) {
         this.setState({
@@ -146,16 +217,11 @@ class Appc8 extends Component {
         return (
             <Router>
                 <Layout>
-                    <Content
-                        style={{
-                            background: '#FFCC66',
-                            padding: 24,
-                            margin: 30,
-                            minHeight: 280,
-                            fontSize: 24
-                        }}
+                <body
+                        style={{ background: "#ebe18d", padding: "90px" , float:"left" }}
                         onChange={this.handleChange}
                     >
+                         <h2 style={{color: "#003a8c", fontWeight: "bold",fontSize: "35px",textAlign:"center"}}>Guass Jordan</h2>
 
                         {/*-----------------------------------------ปุ่มINPUTสมการ----------------------------------------------------*/}
                         <Row gutter={[40, 40]}
@@ -168,10 +234,11 @@ class Appc8 extends Component {
                                     <h2>Row</h2><Input size="large" name="row" ></Input>
                                     <h2>Column</h2><Input size="large" name="column" ></Input>
                                 </div>
+                                <br></br>
                                 {this.state.showDimentionButton &&
                                     <Button id="dimention_button" onClick={
                                         ()=>this.createMatrix(this.state.row, this.state.column)
-                                    }
+                                    } style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}
                                     >
                                         Submit<br></br>
                                     </Button>
@@ -180,12 +247,18 @@ class Appc8 extends Component {
                                 {this.state.showMatrixButton &&
                                     <Button
                                         id="matrix_button"
-                                        onClick={()=>this.jordan(this.state.row)}>
+                                        onClick={()=>this.jordan(this.state.row)} style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}>
                                         Submit
                                     </Button>
                                 }
+                                <Button id="submit_button" onClick= {
+                                
+                                ()=>this.dataapi()
+                                 }  
+                                 style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}>API</Button>
                             </Col>
                         </Row>
+                        <br></br>
                         <Row gutter={[40, 40]}>
                             <Col span={8} offset={4}>
                                 <Card
@@ -215,7 +288,7 @@ class Appc8 extends Component {
                                 </Card>
                             </Col>
                         </Row>
-                    </Content>
+                    </body>
                 </Layout>
             </Router>
         );

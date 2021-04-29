@@ -6,12 +6,16 @@ import { Layout, Breadcrumb } from 'antd';
 import { range, compile, lusolve, format ,det} from 'mathjs';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import axios from 'axios';
 const { Header, Content, Footer, Sider } = Layout;
-const InputStyle = {
-    background: "#f58216",
-    color: "white",
-    fontWeight: "bold",
-    fontSize: "24px"
+const InputColor = {
+    background: "",
+    color: "#003a8c", 
+    fontWeight: "bold", 
+    fontSize: "24px",
+    width: 300 ,
+    height:50
+    
 
 };
 var A = [], B = [], X, matrixA = [], matrixB = [], output = []
@@ -34,6 +38,51 @@ class Appc3 extends Component {
 
     gauss(n) {
         this.initMatrix()
+        if (A[0][0] === 0) { //pivoting
+            var tempRow = JSON.parse(JSON.stringify(A[0]));
+            var tempColumn = B[0];
+            A[0] = A[1];
+            A[1] = tempRow;
+            B[0] = B[1];
+            B[1] = tempColumn;
+        }
+        //Forward eliminated
+        for(var k=0 ; k<n ; k++) {
+            for(var i=k+1 ; i<n ; i++) {
+                var factor = A[i][k] / A[k][k];
+                for (var j=k ; j<n ; j++) {
+                    A[i][j] = A[i][j] - factor*A[k][j];
+                }
+                B[i] = B[i] - factor*B[k];
+
+            }
+        }
+        alert(A)
+        alert(B)
+        //Backward Substitution
+        X = new Array(n);
+        X[n-1] = B[n-1] / A[n-1][n-1]; //find Xn
+        for(i=n-2 ; i>=0 ; i--) { //find Xn-1 to X1
+            var sum = B[i];
+            for (j=i+1 ; j<n ; j++) {
+                sum = sum - A[i][j]*X[j];
+            }
+            X[i] = Math.round(sum / A[i][i]);
+        }    
+        for (i=0 ; i<n ; i++) {
+            output.push("x"+(i+1)+" = "+X[i]);
+            output.push(<br/>)
+        }
+
+
+        this.setState({
+            showOutputCard: true
+        });
+
+      
+    }
+    gauss2(n) {
+        console.log(A)
         if (A[0][0] === 0) { //pivoting
             var tempRow = JSON.parse(JSON.stringify(A[0]));
             var tempColumn = B[0];
@@ -130,6 +179,19 @@ class Appc3 extends Component {
             B.push(parseFloat(document.getElementById("b"+(i+1)).value));
         }
     }
+    dataapi = async()=>{
+        var response = await axios.get('http://localhost:3000/GuassElimination').then(res => {return res.data});
+        console.log(response)
+        this.setState({
+            A:response['A'],
+            B:response['B'],
+            row:response['row']
+        })
+        A = this.state.A;
+        B = this.state.B;
+        this.gauss2(this.state.row);
+        
+    }
 
     handleChange(event) {
         this.setState({
@@ -140,16 +202,11 @@ class Appc3 extends Component {
         return (
             <Router>
                 <Layout>
-                    <Content
-                        style={{
-                            background: '#FFCC66',
-                            padding: 24,
-                            margin: 30,
-                            minHeight: 280,
-                            fontSize: 24
-                        }}
+                <body
+                        style={{ background: "#ebe18d", padding: "90px" , float:"left" }}
                         onChange={this.handleChange}
                     >
+                     <h2 style={{color: "#003a8c", fontWeight: "bold",fontSize: "35px",textAlign:"center"}}>Guass Elimination</h2>
                         {/*-----------------------------------------ปุ่มINPUTสมการ----------------------------------------------------*/}
                         <Row gutter={[40, 40]}
                             bordered={true}
@@ -161,24 +218,31 @@ class Appc3 extends Component {
                                     <h2>Row</h2><Input size="large" name="row" ></Input>
                                     <h2>Column</h2><Input size="large" name="column" ></Input>
                                 </div>
+                                <br></br>
                                 {this.state.showDimentionButton &&
                                     <Button id="dimention_button" onClick={
                                         ()=>this.createMatrix(this.state.row, this.state.column)
-                                    }
+                                    } style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}
                                     >
                                         Submit<br></br>
                                     </Button>
                                 }
+                                <Button id="submit_button" onClick= {
+                                
+                                ()=>this.dataapi()
+                                 }  
+                                 style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}>API</Button>
 
                                 {this.state.showMatrixButton &&
                                     <Button
                                         id="matrix_button"
-                                        onClick={()=>this.gauss(this.state.row)}>
+                                        onClick={()=>this.gauss(this.state.row)} style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}>
                                         Submit
                                     </Button>
                                 }
                             </Col>
                         </Row>
+                        <br></br>
                         <Row gutter={[40, 40]}>
                             <Col span={8} offset={4}>
                                 <Card
@@ -207,7 +271,7 @@ class Appc3 extends Component {
                                 </Card>
                             </Col>
                         </Row>
-                    </Content>
+                    </body>
                 </Layout>
             </Router>
         );
