@@ -2,16 +2,20 @@ import React, { Component } from 'react'
 
 import { Menu, Input, Row, Col, Button, Card, Table } from 'antd';
 import { Carousel } from 'antd';
-import { Layout, Breadcrumb } from 'antd';
+import { Layout, Breadcrumb,Empty } from 'antd';
 import { range, compile, lusolve, format, det, subtract, multiply, transpose, add,inv,fraction } from 'mathjs';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import axios from 'axios';
 const { Header, Content, Footer, Sider } = Layout;
-const InputStyle = {
-    background: "#f58216",
-    color: "white",
-    fontWeight: "bold",
-    fontSize: "24px"
+const InputColor = {
+    background: "",
+    color: "#003a8c", 
+    fontWeight: "bold", 
+    fontSize: "24px",
+    width: 300 ,
+    height:50
+    
 
 };
 var A = [], B = [], matrixA = [], matrixB = [], x , epsilon, dataInTable = [], count=1;
@@ -79,6 +83,42 @@ class Jacobi extends Component {
 
       
     }
+    jacobi2(n) {
+        x = new Array(n);
+        var temp;
+        var stop = 0;
+        var xold = new Array(n);
+        epsilon = new Array(n);
+        x.fill(0)
+        xold.fill(0);
+        do {
+            temp = [];
+            xold = x;
+            for (var i=0 ; i<n ; i++) {
+                var sum = 0;
+                for (var j=0 ; j<n ; j++) {
+                    if (i !== j) { //else i == j That is a divide number
+                        sum = sum + A[i][j]*x[j];
+                    }
+                }
+                temp[i] = (B[i] - sum)/A[i][i]; //update x[i]
+                
+            }        
+            x = temp;
+            stop++;
+        } while(this.error(x, xold) && stop<100); //if true , continue next iteration
+        /*
+        
+        for (i=0 ; i<x.length ; i++) {
+                output.push(x[i]);
+                output.push(<br/>);
+        }*/
+        this.setState({
+            showOutputCard: true
+        });
+
+      
+    }
     error(xnew, xold) {
         for (var i=0 ; i<xnew.length ; i++) {
             console.log(Math.abs((xnew[i]-xold[i]) / xnew[i]))
@@ -89,7 +129,7 @@ class Jacobi extends Component {
                 epsilon[i] = Math.abs((xnew[i]-xold[i]) / xnew[i])
             }
         }
-        
+        console.log("a")
         this.appendTable(x, epsilon);
 
         for (i=0 ; i<epsilon.length ; i++) {
@@ -149,6 +189,19 @@ class Jacobi extends Component {
             B.push(parseFloat(document.getElementById("b"+(i+1)).value));
         }
     }
+    dataapi = async()=>{
+        var response = await axios.get('http://localhost:3000/GuassElimination').then(res => {return res.data});
+        console.log(response)
+        this.setState({
+            A:response['A'],
+            B:response['B'],
+            row:response['row']
+        })
+        A = this.state.A;
+        B = this.state.B;
+        this.jacobi2(this.state.row);
+        
+    }
     initialSchema(n) {
         for (var i=1 ; i<=n ; i++) {
             columns.push({
@@ -190,14 +243,8 @@ class Jacobi extends Component {
         return (
             <Router>
                 <Layout>
-                    <Content
-                        style={{
-                            background: '#FFCC66',
-                            padding: 24,
-                            margin: 30,
-                            minHeight: 280,
-                            fontSize: 24
-                        }}
+                <body
+                        style={{ background: "#ebe18d", padding: "90px" , float:"left" }}
                         onChange={this.handleChange}
                     >
 
@@ -212,10 +259,11 @@ class Jacobi extends Component {
                                     <h2>Row</h2><Input size="large" name="row" ></Input>
                                     <h2>Column</h2><Input size="large" name="column" ></Input>
                                 </div>
+                                <br></br>
                                 {this.state.showDimentionButton &&
                                     <Button id="dimention_button" onClick={
                                         ()=>{this.createMatrix(this.state.row, this.state.column);this.initialSchema(this.state.row)}
-                                    }
+                                    } style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}
                                     >
                                         Submit<br></br>
                                     </Button>
@@ -224,12 +272,20 @@ class Jacobi extends Component {
                                 {this.state.showMatrixButton &&
                                     <Button
                                         id="matrix_button"
-                                        onClick={()=>this.jacobi(parseInt(this.state.row))}>
+                                        onClick={()=>this.jacobi(parseInt(this.state.row))} style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}>
                                         Submit
                                     </Button>
                                 }
+
+                                <Button id="submit_button" onClick= {
+                                
+                                ()=>this.dataapi()
+                                 }  
+                                 style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}>API</Button>
                             </Col>
                         </Row>
+
+                        <br></br>
                         <Row gutter={[40, 40]}>
                             <Col span={8} offset={4}>
                                 <Card
@@ -249,18 +305,21 @@ class Jacobi extends Component {
                         <br></br>
 
                         {/*---------------------------------------------------------------------------------------------*/}
+                        
                         <Row gutter={[2, 2]}>
-                            <Col span={10} offset={7}>
+                            <Col span={10} offset={2}>
+                            {this.state.showOutputCard &&
                                 <Card
-                                    title={<h3>Outpot</h3>}
+                                    title={<h3>Output</h3>}
                                     bordered={true}
+                                    style={{overflowX: "scroll" ,width: "200%"}}
                                     onChange={this.handleChange} id="answerCard">
-                                    <Table columns={columns} dataSource={dataInTable} bodyStyle={{fontWeight: "bold", fontSize: "18px", color: "black", overflowX: "scroll", border:"2px solid white"}}
-                            ></Table>
+                                    <Table columns={columns} dataSource={dataInTable} bodyStyle={{fontWeight: "bold", fontSize: "18px", color: "black", border:"2px solid white"}}></Table>
                                 </Card>
+                            }
                             </Col>
                         </Row>
-                    </Content>
+                    </body>
                 </Layout>
             </Router>
         );

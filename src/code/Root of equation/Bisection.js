@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Card, Input, Button, Table} from 'antd';
+import {Card, Input, Button, Table, AutoComplete} from 'antd';
 
 import { LineChart, Line ,XAxis,CartesianGrid,Tooltip,Legend,YAxis} from 'recharts';
 import 'antd/dist/antd.css';
@@ -8,12 +8,13 @@ import axios from 'axios';
 
 
 const InputColor = {
-    background: "#bae7ff",
+    background: "",
     color: "#003a8c", 
     fontWeight: "bold", 
     fontSize: "24px",
     width: 300 ,
     height:50
+    
 
 };
 
@@ -59,14 +60,15 @@ class Bisection extends Component {
             xr: 0,
             fx: "",
             showtable : false,
-            showgraph: false
+            showgraph: false,
+            inputs:true
             
         }
         this.handleChange = this.handleChange.bind(this);
         this.bisection = this.bisection.bind(this);
     }
 
-    f
+    
     bisection(xl, xr) {
         
         
@@ -127,6 +129,7 @@ class Bisection extends Component {
         this.setState({
             showtable: true,
             showgraph: true
+
         })
 
         
@@ -149,46 +152,48 @@ class Bisection extends Component {
 
     
     dataapi = async()=>{
-            var response = await axios.get('http://localhost:3001/api/users/showbisec').then(res => {return res.data});
-            // console.log(response)
+            var response = await axios.get('http://localhost:3000/bisec').then(res => {return res.data});
+            console.log(response)
             this.setState({
-                fx:response['data'][0]['fx'],
-                xl:response['data'][0]['xl'],
-                xr:response['data'][0]['xr']
+                fx:response['fx'],
+                xl:response['xl'],
+                xr:response['xr']
             })
+            
             this.bisection(this.state.xl,this.state.xr);
+            
         }
     
     render() {
         
         return(
             
-            <body style={{ background: "#bae7ff", padding: "90px" , float:"left"}}>
-            <h2 style={{color: "#003a8c", fontWeight: "bold",fontSize: "35px"}}>Bisection</h2>
-                <div style={{float:"left"}}>
+            <body style={{ background: "#ebe18d", padding: "90px" , float:"left",}}>
+            <h2 style={{color: "#003a8c", fontWeight: "bold",fontSize: "35px",textAlign:"center"}}>Bisection</h2>
+                <div style={{textAlign:"center"}}>
                     <Card
                     
                     bordered={true}
-                    style={{ width: 700 ,height:600, background: "#40a9ff", color: "#FFFFFFFF", float:"Auto"}}
+                    style={{ width: 1500 ,height:600, background: "#ebe18d", color: "#FFFFFFFF", float:"Auto"}}
                     onChange={this.handleChange}
                     id="inputCard"
                     >
                         
-                        <h2>f(x)</h2><Input size="large" name="fx"   placeholder={"Input f(x)"}  style={InputColor}></Input><br/><br/><br/><br/>
-                        <h2>X<sub>L</sub></h2><Input size="large" name="xl" style={InputColor}></Input><br/><br/><br/><br/>
-                        <h2>X<sub>R</sub></h2><Input size="large" name="xr" style={InputColor}></Input><br/><br/><br/><br/>
+                        <h2>f(x)</h2>{this.state.inputs &&<Input size="large" name="fx" id ="fx" style={InputColor}></Input>}<br/><br/><br/><br/>
+                        <h2>X<sub>L</sub></h2>{this.state.inputs &&<Input size="large" name="xl" id ="xl" style={InputColor}></Input>}<br/><br/><br/><br/>
+                        <h2>X<sub>R</sub></h2>{this.state.inputs &&<Input size="large" name="xr" id ="xr" style={InputColor}></Input>}<br/><br/><br/><br/>
                         
                         <Button id="submit_button" onClick= {
 
                                 ()=>this.bisection(parseFloat(this.state.xl), parseFloat(this.state.xr))
                             }  
-                        style={{width: 150 , height:50,background: "#4caf50", color: "white", fontSize: "30px"}}>Submit</Button>
+                        style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}>GO</Button>&nbsp;&nbsp;&nbsp;&nbsp;
 
                         <Button id="submit_button" onClick= {
                                 
                                 ()=>this.dataapi()
                         }  
-                        style={{width: 150 , height:50,background: "#4caf50", color: "white", fontSize: "30px"}}>API</Button>
+                        style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}>API</Button>
                         
                         
                     </Card>

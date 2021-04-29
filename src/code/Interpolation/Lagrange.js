@@ -3,12 +3,13 @@ import {Card, Input, Button, Table} from 'antd';
 
 import 'antd/dist/antd.css';
 const InputColor = {
-    background: "#bae7ff",
+    background: "",
     color: "#003a8c", 
     fontWeight: "bold", 
     fontSize: "24px",
     width: 300 ,
     height:50
+    
 
 };
 var table = [
@@ -136,14 +137,14 @@ class Lagrange extends Component {
 
     render() {
         return(
-            <body style={{  background: "#bae7ff", padding: "90px" , float:"left"}}>
-                <h2 style={{color: "#003a8c", fontWeight: "bold",fontSize: "35px"}}>Lagrange Interpolation</h2>
-                <div>
-                    <Card
+            <body style={{ background: "#ebe18d", padding: "90px" , float:"left"}}>
+                     <h2 style={{color: "#003a8c", fontWeight: "bold",fontSize: "35px",textAlign:"center"}}>Lagrange</h2>
+                <div style={{textAlign:"center"}}>
+                    {/* <Card
                       bordered={true}
                       style={{ width: 700 ,height:600, background: "#40a9ff", color: "#FFFFFFFF", float:"Auto"}}
                       onChange={this.handleChange}
-                    >
+                    > */}
                         {this.state.showMatrixinput && 
                         <div>
                             <Table columns={table} dataSource={schedul} pagination={false} bordered={true} bodyStyle={{fontWeight: "bold", fontSize: "18px", color: "white" , overflowY: "scroll", minWidth: 120, maxHeight: 300}}></Table>
@@ -163,9 +164,8 @@ class Lagrange extends Component {
                                 ()=>{this.createTableInput(parseInt(this.state.Point));
                                 }
                             }  
-                                style={{width: 150 , height:50,background: "#4caf50", color: "white", fontSize: "30px"}}>
-                                Submit<br></br>
-                            </Button>
+                            style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}>GO</Button>
+                            
                         }
                         {this.state.showTableButton && 
                             <Button 
@@ -176,7 +176,7 @@ class Lagrange extends Component {
                             </Button>
                         }
                         
-                    </Card>
+                    {/* </Card> */}
                     
 
                     {this.state.showanswer &&

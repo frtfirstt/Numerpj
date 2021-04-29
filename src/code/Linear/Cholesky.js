@@ -6,12 +6,16 @@ import { Layout, Breadcrumb } from 'antd';
 import { range, compile, lusolve, format ,det} from 'mathjs';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import axios from 'axios';
 const { Header, Content, Footer, Sider } = Layout;
-const InputStyle = {
-    background: "#f58216",
-    color: "white",
-    fontWeight: "bold",
-    fontSize: "24px"
+const InputColor = {
+    background: "",
+    color: "#003a8c", 
+    fontWeight: "bold", 
+    fontSize: "24px",
+    width: 300 ,
+    height:50
+    
 
 };
 var A = [], B = [], matrixA = [], matrixB = [], output = [], decompose;
@@ -34,6 +38,20 @@ class Cholesky extends Component {
 
     Lu(n) {
         this.initMatrix();
+        decompose = lusolve(A, B)
+        for (var i=0 ; i<decompose.length ; i++) {
+            output.push(Math.round(decompose[i]));
+            output.push(<br/>)
+        }
+        this.setState({
+            showOutputCard: true
+        });
+    }
+    
+    printFraction (value) {
+        return format(value, { fraction: 'ratio' })
+    }
+    Lu2(n) {
         decompose = lusolve(A, B)
         for (var i=0 ; i<decompose.length ; i++) {
             output.push(Math.round(decompose[i]));
@@ -96,6 +114,20 @@ class Cholesky extends Component {
         }
     }
 
+    dataapi = async()=>{
+        var response = await axios.get('http://localhost:3000/GuassElimination').then(res => {return res.data});
+        console.log(response)
+        this.setState({
+            A:response['A'],
+            B:response['B'],
+            row:response['row']
+        })
+        A = this.state.A;
+        B = this.state.B;
+        this.Lu2(this.state.row);
+        
+    }
+
     handleChange(event) {
         this.setState({
             [event.target.name]: event.target.value
@@ -106,14 +138,8 @@ class Cholesky extends Component {
         return (
             <Router>
                 <Layout>
-                    <Content
-                        style={{
-                            background: '#FFCC66',
-                            padding: 24,
-                            margin: 30,
-                            minHeight: 280,
-                            fontSize: 24
-                        }}
+                <body
+                        style={{ background: "#ebe18d", padding: "90px" , float:"left" }}
                         onChange={this.handleChange}
                     >
                         {/*-----------------------------------------ปุ่มINPUTสมการ----------------------------------------------------*/}
@@ -127,24 +153,31 @@ class Cholesky extends Component {
                                     <h2>Row</h2><Input size="large" name="row" ></Input>
                                     <h2>Column</h2><Input size="large" name="column" ></Input>
                                 </div>
+                                <br></br>
                                 {this.state.showDimentionButton &&
                                     <Button id="dimention_button" onClick={
                                         ()=>this.createMatrix(this.state.row, this.state.column)
-                                    }
+                                    } style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}
                                     >
                                         Submit<br></br>
                                     </Button>
                                 }
+                                <Button id="submit_button" onClick= {
+                                
+                                ()=>this.dataapi()
+                                 }  
+                                 style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}>API</Button>
 
                                 {this.state.showMatrixButton &&
                                     <Button
                                         id="matrix_button"
-                                        onClick={()=>this.Lu(this.state.row)}>
+                                        onClick={()=>this.Lu(this.state.row)} style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}>
                                         Submit
                                     </Button>
                                 }
                             </Col>
                         </Row>
+                        <br></br>
                         <Row gutter={[40, 40]}>
                             <Col span={8} offset={4}>
                                 <Card
@@ -173,7 +206,7 @@ class Cholesky extends Component {
                                 </Card>
                             </Col>
                         </Row>
-                    </Content>
+                    </body>
                 </Layout>
             </Router>
         );
