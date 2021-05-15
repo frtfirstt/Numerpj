@@ -18,6 +18,7 @@ const InputColor = {
     
 
 };
+var api
 var A = [], B = [], matrixA = [], matrixB = [], x , epsilon, dataInTable = [], count=1;
 var columns = [
     {
@@ -48,42 +49,6 @@ class Jacobi extends Component {
   
     jacobi(n) {
         this.initMatrix();
-        x = new Array(n);
-        var temp;
-        var stop = 0;
-        var xold = new Array(n);
-        epsilon = new Array(n);
-        x.fill(0)
-        xold.fill(0);
-        do {
-            temp = [];
-            xold = x;
-            for (var i=0 ; i<n ; i++) {
-                var sum = 0;
-                for (var j=0 ; j<n ; j++) {
-                    if (i !== j) { //else i == j That is a divide number
-                        sum = sum + A[i][j]*x[j];
-                    }
-                }
-                temp[i] = (B[i] - sum)/A[i][i]; //update x[i]
-                
-            }        
-            x = temp;
-            stop++;
-        } while(this.error(x, xold) && stop<100); //if true , continue next iteration
-        /*
-        
-        for (i=0 ; i<x.length ; i++) {
-                output.push(x[i]);
-                output.push(<br/>);
-        }*/
-        this.setState({
-            showOutputCard: true
-        });
-
-      
-    }
-    jacobi2(n) {
         x = new Array(n);
         var temp;
         var stop = 0;
@@ -189,18 +154,23 @@ class Jacobi extends Component {
             B.push(parseFloat(document.getElementById("b"+(i+1)).value));
         }
     }
-    dataapi = async()=>{
-        var response = await axios.get('http://localhost:3000/GuassElimination').then(res => {return res.data});
-        console.log(response)
-        this.setState({
-            A:response['A'],
-            B:response['B'],
-            row:response['row']
-        })
-        A = this.state.A;
-        B = this.state.B;
-        this.jacobi2(this.state.row);
-        
+    async dataapi() {
+        await axios({method: "get",url: "http://localhost:5000/database/gauss",}).then((response) => {console.log("response: ", response.data);api = response.data;});
+        await this.setState({
+            row: api.row,
+            column: api.row,
+          });
+          matrixA = [];
+          matrixB = [];
+          await this.createMatrix(api.row, api.row);
+          for (let i = 1; i <= api.row; i++) {
+            for (let j = 1; j <= api.row; j++) {
+              document.getElementById("a" + i + "" + j).value =
+                api.A[i - 1][j - 1];
+            }
+            document.getElementById("b" + i).value = api.B[i - 1];
+          }
+          this.jacobi(api.row);
     }
     initialSchema(n) {
         for (var i=1 ; i<=n ; i++) {
@@ -256,8 +226,8 @@ class Jacobi extends Component {
                             <Col span={10} offset={7}>
 
                                 <div>
-                                    <h2>Row</h2><Input size="large" name="row" ></Input>
-                                    <h2>Column</h2><Input size="large" name="column" ></Input>
+                                <h2>Row</h2><Input size="large" name="row" value={this.state.row}></Input>
+                                    <h2>Column</h2><Input size="large" name="column" value={this.state.column}></Input>
                                 </div>
                                 <br></br>
                                 {this.state.showDimentionButton &&

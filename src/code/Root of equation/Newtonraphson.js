@@ -5,7 +5,7 @@ import { LineChart, Line ,XAxis,CartesianGrid,Tooltip,Legend,YAxis} from 'rechar
 import 'antd/dist/antd.css';
 import {  compile ,derivative} from 'mathjs';
 import axios from 'axios';
-
+var api
 const InputColor = {
     background: "",
     color: "#003a8c", 
@@ -60,12 +60,11 @@ class Newton extends Component {
         var n=0;
         var Epsilon= parseFloat(0.000000);
         var array2d  = []
-
+        
         array2d[0] = []//x
         array2d[1] = []//error
-
         do{ 
-            xnew = xold - (this.funcDiff(xold)/this.funcDiff(xold));
+            xnew = xold - (this.func(xold)/this.funcDiff(xold));
             Epsilon = Math.abs((xnew-xold) / xnew);
             array2d[0][n] =  xnew.toFixed(6);
             array2d[1][n] = Math.abs(Epsilon).toFixed(6);
@@ -73,7 +72,6 @@ class Newton extends Component {
             xold = xnew;
 
         }while(Math.abs(Epsilon)>0.000001);
-
         
         
         for (var i=0 ; i<array2d[0].length ; i++) {
@@ -99,11 +97,10 @@ class Newton extends Component {
         return comfunc.evaluate(data)       
     }
 
-    funcDiff(datastr) {
-        var comfunc = derivative(this.state.fx);
-        
-        let data = {x:parseFloat(datastr)};
-        return comfunc.evaluate(data); 
+    funcDiff = (X) => {
+        var expr = derivative(this.state.fx, 'x');
+        let scope = {x:parseFloat(X)};
+        return expr.evaluate(scope); 
     }
     
     
@@ -112,15 +109,15 @@ class Newton extends Component {
             [event.target.name]: event.target.value
         });
     }
-    dataapi = async()=>{
-        var response = await axios.get('http://localhost:3000/newtonraphson').then(res => {return res.data});
-        this.setState({
-            fx:response['fx'],
-            x0:response['x0'],
-            
+    async dataapi() {
+        await axios({method: "get",url: "http://localhost:5000/database/newtonraphson",}).then((response) => {console.log("response: ", response.data);api = response.data;});
+        await this.setState({
+            fx:api.fx,
+          x0:api.x0
         })
-        this.newton_raphson(this.state.x0);
-    }
+        
+        this.newton_raphson(this.state.x0)
+      }
     render() {
         return(
             <body style={{ background: "#ebe18d", padding: "90px" , float:"left" }}>
@@ -132,8 +129,8 @@ class Newton extends Component {
                     style={{ width: 1500 ,height:600, background: "#ebe18d", color: "#FFFFFFFF", float:"Auto"}}
                     onChange={this.handleChange}
                     >
-                        <h2>f(x)</h2><Input size="large" name="fx" style={InputColor}></Input><br/><br/><br/><br/>
-                        <h2>X<sub>0</sub></h2><Input size="large" name="x0" style={InputColor}></Input><br/><br/><br/><br/>
+                        <h2>f(x)</h2><Input size="large" name="fx"value={this.state.fx} style={InputColor}></Input><br/><br/><br/><br/>
+                        <h2>X<sub>0</sub></h2><Input size="large" name="x0" value={this.state.x0}style={InputColor}></Input><br/><br/><br/><br/>
                         <Button id="submit_button" onClick= {
                                 ()=>this.newton_raphson(parseFloat(this.state.x0))
                             }  

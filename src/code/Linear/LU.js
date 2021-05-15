@@ -18,6 +18,7 @@ const InputColor = {
     
 
 };
+var api
 var A = [], B = [], matrixA = [], matrixB = [], output = [], decompose, output2 = [];
 class LU extends Component {
     constructor() {
@@ -38,23 +39,6 @@ class LU extends Component {
 
     Lu(n) {
         this.initMatrix();
-        decompose = lusolve(A, B)
-        for (var i = 0; i < decompose.length; i++) {
-            output.push(<h2>X<sub>{i}</sub>=&nbsp;&nbsp;{Math.round(decompose[i])}</h2>);
-            output2.push(<h2>X<sub>{i}</sub>=&nbsp;&nbsp;{Math.round(decompose[i])}</h2>);
-            output.push(<br />)
-            output2.push(<br />)
-        }
-        console.log(output);
-        this.setState({
-            showOutputCard: true,
-            showMatrixButton: false
-        });
-
-
-    }
-    Lu2(n) {
-        
         decompose = lusolve(A, B)
         for (var i = 0; i < decompose.length; i++) {
             output.push(<h2>X<sub>{i}</sub>=&nbsp;&nbsp;{Math.round(decompose[i])}</h2>);
@@ -128,18 +112,23 @@ class LU extends Component {
         A = c;
         B = d;
     }
-    dataapi = async()=>{
-        var response = await axios.get('http://localhost:3000/GuassElimination').then(res => {return res.data});
-        console.log(response)
-        this.setState({
-            A:response['A'],
-            B:response['B'],
-            row:response['row']
-        })
-        A = this.state.A;
-        B = this.state.B;
-        this.Lu2(this.state.row);
-        
+    async dataapi() {
+        await axios({method: "get",url: "http://localhost:5000/database/gauss",}).then((response) => {console.log("response: ", response.data);api = response.data;});
+        await this.setState({
+            row: api.row,
+            column: api.row,
+          });
+          matrixA = [];
+          matrixB = [];
+          await this.createMatrix(api.row, api.row);
+          for (let i = 1; i <= api.row; i++) {
+            for (let j = 1; j <= api.row; j++) {
+              document.getElementById("a" + i + "" + j).value =
+                api.A[i - 1][j - 1];
+            }
+            document.getElementById("b" + i).value = api.B[i - 1];
+          }
+          this.Lu(api.row);
     }
 
     handleChange(event) {
@@ -163,8 +152,8 @@ class LU extends Component {
                             <Col span={10} offset={7}>
 
                                 <div>
-                                    <h2>Row</h2><Input size="large" name="row" ></Input>
-                                    <h2>Column</h2><Input size="large" name="column" ></Input>
+                                <h2>Row</h2><Input size="large" name="row" value={this.state.row}></Input>
+                                    <h2>Column</h2><Input size="large" name="column" value={this.state.column}></Input>
                                 </div>
                                 <br></br>
                                 {this.state.showDimentionButton &&

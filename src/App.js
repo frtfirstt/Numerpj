@@ -16,7 +16,7 @@ import Bisection from './code/Root of equation/Bisection';
 import Falseposition from './code/Root of equation/False-position';
 import Onepoint from './code/Root of equation/One-pointIteration';
 import Newton from './code/Root of equation/Newtonraphson';
-// import Secant from './code/Root of equation/Secant';
+import Secant from './code/Root of equation/Secant';
 
 import Cramerrule from './code/Linear/Cramerrule';
 import GuassElimination from './code/Linear/GuassElimination';
@@ -60,7 +60,7 @@ class App extends React.Component {
           <Menu.Item key="6">False-position<Link to="/false-position"></Link></Menu.Item>
           <Menu.Item key="7">One-point Iteration<Link to="/onepoint"></Link></Menu.Item>
           <Menu.Item key="8">Newtonraphson<Link to="/Newton"></Link></Menu.Item>
-          {/* <Menu.Item key="9">Secant<Link to="/Secant"></Link></Menu.Item> */}
+          <Menu.Item key="9">Secant<Link to="/Secant"></Link></Menu.Item>
 
         </SubMenu>
         <SubMenu key="sub4" icon={<SettingOutlined />} title="Linear Equation">
@@ -95,7 +95,7 @@ class App extends React.Component {
           <Route path="/False-position" component={Falseposition}></Route>  
           <Route path="/onepoint" component={Onepoint}></Route>  
           <Route path="/Newton" component={Newton}></Route>  
-          {/* <Route path="/Secant" component={Secant}></Route>   */}
+          <Route path="/Secant" component={Secant}></Route>  
           <Route path="/Cramerrule" component={Cramerrule}></Route>  
           <Route path="/GuassElimination" component={GuassElimination}></Route>  
           <Route path="/GuassJordan" component={GuassJordan}></Route>  

@@ -18,6 +18,7 @@ const InputColor = {
     
 
 };
+var api
 var A = [], B = [], X, matrixA = [], matrixB = [], output = []
 class Appc3 extends Component {
     constructor() {
@@ -57,8 +58,6 @@ class Appc3 extends Component {
 
             }
         }
-        alert(A)
-        alert(B)
         //Backward Substitution
         X = new Array(n);
         X[n-1] = B[n-1] / A[n-1][n-1]; //find Xn
@@ -81,51 +80,7 @@ class Appc3 extends Component {
 
       
     }
-    gauss2(n) {
-        console.log(A)
-        if (A[0][0] === 0) { //pivoting
-            var tempRow = JSON.parse(JSON.stringify(A[0]));
-            var tempColumn = B[0];
-            A[0] = A[1];
-            A[1] = tempRow;
-            B[0] = B[1];
-            B[1] = tempColumn;
-        }
-        //Forward eliminated
-        for(var k=0 ; k<n ; k++) {
-            for(var i=k+1 ; i<n ; i++) {
-                var factor = A[i][k] / A[k][k];
-                for (var j=k ; j<n ; j++) {
-                    A[i][j] = A[i][j] - factor*A[k][j];
-                }
-                B[i] = B[i] - factor*B[k];
-
-            }
-        }
-        alert(A)
-        alert(B)
-        //Backward Substitution
-        X = new Array(n);
-        X[n-1] = B[n-1] / A[n-1][n-1]; //find Xn
-        for(i=n-2 ; i>=0 ; i--) { //find Xn-1 to X1
-            var sum = B[i];
-            for (j=i+1 ; j<n ; j++) {
-                sum = sum - A[i][j]*X[j];
-            }
-            X[i] = Math.round(sum / A[i][i]);
-        }    
-        for (i=0 ; i<n ; i++) {
-            output.push("x"+(i+1)+" = "+X[i]);
-            output.push(<br/>)
-        }
-
-
-        this.setState({
-            showOutputCard: true
-        });
-
-      
-    }
+    
     createMatrix(row, column) {
         A = []
         B = []
@@ -179,18 +134,24 @@ class Appc3 extends Component {
             B.push(parseFloat(document.getElementById("b"+(i+1)).value));
         }
     }
-    dataapi = async()=>{
-        var response = await axios.get('http://localhost:3000/GuassElimination').then(res => {return res.data});
-        console.log(response)
-        this.setState({
-            A:response['A'],
-            B:response['B'],
-            row:response['row']
-        })
-        A = this.state.A;
-        B = this.state.B;
-        this.gauss2(this.state.row);
-        
+
+    async dataapi() {
+        await axios({method: "get",url: "http://localhost:5000/database/gauss",}).then((response) => {console.log("response: ", response.data);api = response.data;});
+        await this.setState({
+            row: api.row,
+            column: api.row,
+          });
+          matrixA = [];
+          matrixB = [];
+          await this.createMatrix(api.row, api.row);
+          for (let i = 1; i <= api.row; i++) {
+            for (let j = 1; j <= api.row; j++) {
+              document.getElementById("a" + i + "" + j).value =
+                api.A[i - 1][j - 1];
+            }
+            document.getElementById("b" + i).value = api.B[i - 1];
+          }
+          this.gauss(api.row);
     }
 
     handleChange(event) {
@@ -215,8 +176,8 @@ class Appc3 extends Component {
                             <Col span={10} offset={7}>
 
                                 <div>
-                                    <h2>Row</h2><Input size="large" name="row" ></Input>
-                                    <h2>Column</h2><Input size="large" name="column" ></Input>
+                                    <h2>Row</h2><Input size="large" name="row" value={this.state.row}></Input>
+                                    <h2>Column</h2><Input size="large" name="column" value={this.state.column}></Input>
                                 </div>
                                 <br></br>
                                 {this.state.showDimentionButton &&

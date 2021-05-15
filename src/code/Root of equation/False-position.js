@@ -4,7 +4,7 @@ import { LineChart, Line ,XAxis,CartesianGrid,Tooltip,Legend,YAxis} from 'rechar
 import 'antd/dist/antd.css';
 import {  compile } from 'mathjs';
 import axios from 'axios';
-
+var api
 const InputColor = {
     background: "",
     color: "#003a8c", 
@@ -126,15 +126,15 @@ class FalsePosition extends Component {
             [event.target.name]: event.target.value
         });
     }
-    dataapi = async()=>{
-        var response = await axios.get('http://localhost:3000/false-position').then(res => {return res.data});
-        this.setState({
-            fx:response['fx'],
-            xl:response['xl'],
-            xr:response['xr']
+    async dataapi() {
+        await axios({method: "get",url: "http://localhost:5000/database/falseposition",}).then((response) => {console.log("response: ", response.data);api = response.data;});
+        await this.setState({
+            fx:api.fx,
+          xl:api.xl,
+          xr:api.xr
         })
         this.false_position(this.state.xl,this.state.xr);
-    }
+      }
     render() {
         return(
             <body style={{ background: "#ebe18d", padding: "90px" , float:"left" }}>
@@ -146,9 +146,9 @@ class FalsePosition extends Component {
                     style={{ width: 1500 ,height:600, background: "#ebe18d", float:"Auto" ,margin:"auto"}}
                     onChange={this.handleChange}
                     >
-                        <h2>f(x)</h2><Input size="large" name="fx"   style={InputColor}></Input><br/><br/><br/><br/>
-                        <h2>X<sub>L</sub></h2><Input size="large" name="xl" style={InputColor}></Input><br/><br/><br/><br/>
-                        <h2>X<sub>R</sub></h2><Input size="large" name="xr" style={InputColor}></Input><br/><br/><br/><br/>
+                        <h2>f(x)</h2><Input size="large" name="fx"   value={this.state.fx}style={InputColor}></Input><br/><br/><br/><br/>
+                        <h2>X<sub>L</sub></h2><Input size="large" name="xl"  value={this.state.xl} style={InputColor}></Input><br/><br/><br/><br/>
+                        <h2>X<sub>R</sub></h2><Input size="large" name="xr"  value={this.state.xr} style={InputColor}></Input><br/><br/><br/><br/>
                         <Button id="submit_button" onClick= {
                                 ()=>this.false_position(parseFloat(this.state.xl), parseFloat(this.state.xr))
                             }  

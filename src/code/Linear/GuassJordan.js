@@ -18,6 +18,7 @@ const InputColor = {
     
 
 };
+var api
 var A = [], B = [], matrixA = [], matrixB = [], output = []
 
 class Appc8 extends Component {
@@ -92,60 +93,6 @@ class Appc8 extends Component {
 
       
     }
-    jordan2(n) {
-        if (A[0][0] === 0) { //pivoting
-            var tempRow = JSON.parse(JSON.stringify(A[0]));
-            var tempColumn = B[0];
-            A[0] = A[1];
-            A[1] = tempRow;
-            B[0] = B[1];
-            B[1] = tempColumn;
-        }
-        //Forward eliminate
-        for(var k=0 ; k<n ; k++) {
-            for(var i=k+1 ; i<n ; i++) {
-                var factor = A[i][k] / A[k][k];
-                for (var j=k ; j<n ; j++) {
-                    A[i][j] = A[i][j] - factor*A[k][j];
-                }
-                B[i] = B[i] - factor*B[k];
-
-            }
-        }
-        //Backward Substitution
-        for (k=n-1 ; k>=0 ; k--) {
-            for(i=k ; i>=0 ; i--) {
-                
-                if (i === k) {//Identity matrix
-                    factor = 1 / A[i][k];
-            
-                    for (j=0 ; j<n ; j++) {
-                        A[i][j] = A[i][j] * factor;
-                    }
-                    B[i] = B[i] * factor;
-                
-                
-                }
-                else {
-                    factor = A[i][k] / A[k][k];
-                    for (j=0 ; j<n ; j++) {
-                        A[i][j] = A[i][j] - factor*A[k][j];
-                    }
-                    B[i] = B[i] - factor*B[k];
-                }
-            } 
-        }
-        for (i=0 ; i<n ; i++) {
-            output.push(B[i]);
-            output.push(<br/>)
-        }
-        this.setState({
-            showOutputCard: true
-        });
-
-      
-    }
-
     createMatrix(row, column) {
         for (var i=1 ; i<=row ; i++) {
             for (var j=1 ; j<=column ; j++) {
@@ -193,18 +140,24 @@ class Appc8 extends Component {
             B.push(parseFloat(document.getElementById("b"+(i+1)).value));
         }
     }
-    dataapi = async()=>{
-        var response = await axios.get('http://localhost:3000/GuassElimination').then(res => {return res.data});
-        console.log(response)
-        this.setState({
-            A:response['A'],
-            B:response['B'],
-            row:response['row']
-        })
-        A = this.state.A;
-        B = this.state.B;
-        this.jordan2(this.state.row);
-        
+
+    async dataapi() {
+        await axios({method: "get",url: "http://localhost:5000/database/gauss",}).then((response) => {console.log("response: ", response.data);api = response.data;});
+        await this.setState({
+            row: api.row,
+            column: api.row,
+          });
+          matrixA = [];
+          matrixB = [];
+          await this.createMatrix(api.row, api.row);
+          for (let i = 1; i <= api.row; i++) {
+            for (let j = 1; j <= api.row; j++) {
+              document.getElementById("a" + i + "" + j).value =
+                api.A[i - 1][j - 1];
+            }
+            document.getElementById("b" + i).value = api.B[i - 1];
+          }
+          this.jordan(api.row);
     }
 
     handleChange(event) {
@@ -231,8 +184,8 @@ class Appc8 extends Component {
                             <Col span={10} offset={7}>
 
                                 <div>
-                                    <h2>Row</h2><Input size="large" name="row" ></Input>
-                                    <h2>Column</h2><Input size="large" name="column" ></Input>
+                                <h2>Row</h2><Input size="large" name="row" value={this.state.row}></Input>
+                                    <h2>Column</h2><Input size="large" name="column" value={this.state.column}></Input>
                                 </div>
                                 <br></br>
                                 {this.state.showDimentionButton &&

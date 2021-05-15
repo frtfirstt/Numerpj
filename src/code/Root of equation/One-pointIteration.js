@@ -5,7 +5,7 @@ import 'antd/dist/antd.css';
 
 import {  compile } from 'mathjs';
 import axios from 'axios';
-
+var api;
 
 const InputColor = {
     background: "",
@@ -100,15 +100,15 @@ class Onepoint extends Component {
             [event.target.name]: event.target.value
         });
     }
-    dataapi = async()=>{
-        var response = await axios.get('http://localhost:3001/api/users/showonepoint').then(res => {return res.data});
-        this.setState({
-            fx:response['data'][0]['fx'],
-            x0:response['data'][0]['x0'],
-            
+
+    async dataapi() {
+        await axios({method: "get",url: "http://localhost:5000/database/onepoint",}).then((response) => {console.log("response: ", response.data);api = response.data;});
+        await this.setState({
+            fx:api.fx,
+            x0:api.x0
         })
-        this.onepoint(this.state.x0);
-    }
+        this.onepoint(this.state.x0)
+      }
     render() {
         return(
             <body style={{ background: "#ebe18d", padding: "90px" , float:"left"}}>
@@ -120,8 +120,8 @@ class Onepoint extends Component {
                     style={{ width: 1500 ,height:600, background: "#ebe18d", color: "#FFFFFFFF", float:"Auto"}}
                     onChange={this.handleChange}
                     >
-                        <h2>f(x)</h2><Input size="large" name="fx"   style={InputColor}></Input><br/><br/><br/><br/>
-                        <h2>X<sub>0</sub></h2><Input size="large" name="x0" style={InputColor}></Input><br/><br/><br/><br/>
+                        <h2>f(x)</h2><Input size="large" name="fx"   value={this.state.fx}style={InputColor}></Input><br/><br/><br/><br/>
+                        <h2>X<sub>0</sub></h2><Input size="large" name="x0" value={this.state.x0} style={InputColor}></Input><br/><br/><br/><br/>
                         <Button id="submit_button" onClick= {
                                 ()=>this.onepoint(parseFloat(this.state.x0))
                             }  //go

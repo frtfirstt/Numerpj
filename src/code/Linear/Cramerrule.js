@@ -18,6 +18,7 @@ const InputColor = {
     
 
 };
+var api
 var A = [], B = [], answer = [], matrixA = [], matrixB = []
 class Cramerrule extends Component {
     constructor() {
@@ -38,34 +39,6 @@ class Cramerrule extends Component {
 
     cramer() {
         this.initMatrix();
-        var counter = 0;
-        // eslint-disable-next-line eqeqeq
-        while (counter != this.state.row) {
-            var transformMatrix = JSON.parse(JSON.stringify(A));//Deep copy
-            for (var i = 0; i < this.state.row; i++) {
-                for (var j = 0; j < this.state.column; j++) {
-                    if (j === counter) {
-                        transformMatrix[i][j] = B[i]
-                        break;
-                    }
-
-                }
-
-            }
-            counter++;
-            answer.push(<h2>X<sub>{counter}</sub>=&nbsp;&nbsp;{Math.round(det(transformMatrix)) / Math.round(det(A))}</h2>)
-            answer.push(<br />)
-
-
-
-        }
-        this.setState({
-            showOutputCard: true
-        });
-
-
-    }
-    cramer2() {
         var counter = 0;
         // eslint-disable-next-line eqeqeq
         while (counter != this.state.row) {
@@ -138,19 +111,25 @@ class Cramerrule extends Component {
             B.push(parseFloat(document.getElementById("b" + (i + 1)).value));
         }
     }
-    dataapi = async()=>{
-        var response = await axios.get('http://localhost:3000/GuassElimination').then(res => {return res.data});
-        console.log(response)
-        this.setState({
-            A:response['A'],
-            B:response['B'],
-            row:response['row']
-        })
-        A = this.state.A;
-        B = this.state.B;
-        this.cramer2(this.state.row);
-        
+    async dataapi() {
+        await axios({method: "get",url: "http://localhost:5000/database/cramer",}).then((response) => {console.log("response: ", response.data);api = response.data;});
+        await this.setState({
+            row: api.row,
+            column: api.row,
+          });
+          matrixA = [];
+          matrixB = [];
+          await this.createMatrix(api.row, api.row);
+          for (let i = 1; i <= api.row; i++) {
+            for (let j = 1; j <= api.row; j++) {
+              document.getElementById("a" + i + "" + j).value =
+                api.A[i - 1][j - 1];
+            }
+            document.getElementById("b" + i).value = api.B[i - 1];
+          }
+          this.cramer();
     }
+
     handleChange(event) {
         this.setState({
             [event.target.name]: event.target.value
@@ -173,8 +152,8 @@ class Cramerrule extends Component {
                             <Col span={10} offset={7}>
 
                                 <div>
-                                    <h2>Row</h2><Input size="large" name="row" ></Input>
-                                    <h2>Column</h2><Input size="large" name="column" ></Input>
+                                    <h2>Row</h2><Input size="large" value={this.state.row} name="row" ></Input>
+                                    <h2>Column</h2><Input size="large" value={this.state.column} name="column" ></Input>
                                 </div>
                                 <br></br>
                                 {this.state.showDimentionButton &&
