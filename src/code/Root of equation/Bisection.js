@@ -6,7 +6,7 @@ import 'antd/dist/antd.css';
 import {  compile } from 'mathjs';
 import axios from 'axios';
 
-
+var api;
 const InputColor = {
     background: "",
     color: "#003a8c", 
@@ -140,19 +140,27 @@ class Bisection extends Component {
     }
 
     
-    dataapi = async()=>{
-            var response = await axios.get('http://localhost:3000/bisec').then(res => {return res.data});
-            console.log(response)
-            this.setState({
-                fx:response['fx'],
-                xl:response['xl'],
-                xr:response['xr']
+    // dataapi = async()=>{
+    //         var response = await axios.get('http://localhost:3000/bisec').then(res => {return res.data});
+    //         console.log(response)
+    //         this.setState({
+    //             fx:response['fx'],
+    //             xl:response['xl'],
+    //             xr:response['xr']
+    //         })
+            
+    //         this.bisection(this.state.xl,this.state.xr);
+            
+    //     }
+        async dataapi() {
+            await axios({method: "get",url: "http://localhost:5000/database/bisection",}).then((response) => {console.log("response: ", response.data);api = response.data;});
+            await this.setState({
+                fx:api.fx,
+              xl:api.xl,
+              xr:api.xr
             })
-            
-            this.bisection(this.state.xl,this.state.xr);
-            
-        }
-    
+            this.bisection(this.state.xl,this.state.xr)
+          }
     render() {
         
         return(
@@ -168,9 +176,9 @@ class Bisection extends Component {
                     id="inputCard"
                     >
                         
-                        <h2>f(x)</h2>{this.state.inputs &&<Input size="large" name="fx" id ="fx" style={InputColor}></Input>}<br/><br/><br/><br/>
-                        <h2>X<sub>L</sub></h2>{this.state.inputs &&<Input size="large" name="xl" id ="xl" style={InputColor}></Input>}<br/><br/><br/><br/>
-                        <h2>X<sub>R</sub></h2>{this.state.inputs &&<Input size="large" name="xr" id ="xr" style={InputColor}></Input>}<br/><br/><br/><br/>
+                        <h2>f(x)</h2>{this.state.inputs &&<Input size="large" name="fx" value={this.state.fx} id ="fx" style={InputColor}></Input>}<br/><br/><br/><br/>
+                        <h2>X<sub>L</sub></h2>{this.state.inputs &&<Input size="large" name="xl"value={this.state.xl} id ="xl" style={InputColor}></Input>}<br/><br/><br/><br/>
+                        <h2>X<sub>R</sub></h2>{this.state.inputs &&<Input size="large" name="xr"value={this.state.xr} id ="xr" style={InputColor}></Input>}<br/><br/><br/><br/>
                         
                         <Button id="submit_button" onClick= {
 

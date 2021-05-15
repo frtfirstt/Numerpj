@@ -100,7 +100,7 @@ class Newton extends Component {
     }
 
     funcDiff(datastr) {
-        var comfunc = derivative(this.state.fx, 'x');
+        var comfunc = derivative(this.state.fx);
         
         let data = {x:parseFloat(datastr)};
         return comfunc.evaluate(data); 
