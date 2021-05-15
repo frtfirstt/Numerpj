@@ -19,7 +19,7 @@ var schedule = []
 const table = [
     {
       title: "Iteration",
-      dataIndex: "iteration",
+      Idatandex: "iteration",
       key: "iteration"
     },
     {
@@ -77,23 +77,14 @@ class FalsePosition extends Component {
             xi = (xl*this.func(xr) - xr*this.func(xl))/(this.func(xr)-this.func(xl));
             if (this.func(xi)*this.func(xr) < 0) {
                 Epsilon = Math.abs((xi-xr) / xi);
-                if (this.func(xl) < this.func(xr)) {
-                    xl = xi;
-                }
-                else {
-                    xr = xi;
-                }
+        
+                xl = xi;
                 
             } 
             else {
                 Epsilon = Math.abs((xi-xr) / xi);
-                if (this.func(xl) < this.func(xr)) {
-                    xr = xi;  
-                }
-                else {
-                    xl = xi;
-                }
-                  
+            
+                xr = xi;  
             }   
             array2d[0][n] =  xl;
             array2d[1][n] =  xr;

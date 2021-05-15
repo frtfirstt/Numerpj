@@ -124,7 +124,7 @@ class Onepoint extends Component {
                         <h2>X<sub>0</sub></h2><Input size="large" name="x0" style={InputColor}></Input><br/><br/><br/><br/>
                         <Button id="submit_button" onClick= {
                                 ()=>this.onepoint(parseFloat(this.state.x0))
-                            }  
+                            }  //go
                             style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}>GO</Button>&nbsp;&nbsp;&nbsp;&nbsp;
 
                         <Button id="submit_button" onClick= {

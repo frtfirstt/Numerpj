@@ -65,7 +65,7 @@ class Newton extends Component {
         array2d[1] = []//error
 
         do{ 
-            xnew = xold - (this.func(xold)/this.funcDiff(xold));
+            xnew = xold - (this.funcDiff(xold)/this.funcDiff(xold));
             Epsilon = Math.abs((xnew-xold) / xnew);
             array2d[0][n] =  xnew.toFixed(6);
             array2d[1][n] = Math.abs(Epsilon).toFixed(6);

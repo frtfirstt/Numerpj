@@ -86,26 +86,15 @@ class Bisection extends Component {
             xm = (xl + xr) / 2;
             if (this.func(xm)*this.func(xr) < 0) { 
                 Epsilon = Math.abs((xm-xr) / xm);
-                if (this.func(xl) < this.func(xr)) {
-                    xl = xm;
-                }
-                else {
-                    xr = xm;
-                }
-                
+             
+                xl = xm;
             } 
             else {
                 
                 Epsilon = Math.abs((xm-xr) / xm);
-                if (this.func(xl) < this.func(xr)) {
-                    
-                    xr = xm;
-                }
-                else {
-                    
-                    xl = xm;
-                } 
-            }       
+         
+                xr = xm;
+            }      
             
 
             array2d[0][k]  =   xl;
@@ -140,7 +129,7 @@ class Bisection extends Component {
         var comfunc = compile(this.state.fx)
         let data = {x:parseFloat(datastr)}
         return comfunc.evaluate(data)       
-    }
+    } //การเอาค่าไปแทนในฟังก์ชั่น
 
     
     handleChange(event) {

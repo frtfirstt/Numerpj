@@ -4,13 +4,13 @@ import 'antd/dist/antd.css';
 import {  sum,inv,multiply } from 'mathjs';
 
 const InputColor = {
-    
-    background: "#bae7ff",
+    background: "",
     color: "#003a8c", 
     fontWeight: "bold", 
     fontSize: "24px",
     width: 300 ,
-    height:50,
+    height:50
+    
 
 };
 var table = [
@@ -149,19 +149,20 @@ class LinearRegression extends Component {
     }
     render() {
         return(
-            <body style={{  background: "#bae7ff", padding: "90px" , float:"left"}}>
-                <h2 style={{color: "#003a8c", fontWeight: "bold",fontSize: "35px"}}>Linear Regression</h2>
-                <div>
+            <body style={{ background: "#ebe18d", padding: "90px" , float:"left"}}>
+                <h2 style={{color: "#003a8c", fontWeight: "bold",fontSize: "35px",textAlign:"center"}}>Linear Regression</h2>
+                <div style={{textAlign:"center"}}>
                     <Card
                       bordered={true}
-                      style={{ width: 700 ,height:600, background: "#40a9ff", color: "#FFFFFFFF", float:"Auto"}}
+                      style={{ width: 1500 ,height:600, background: "#ebe18d", color: "#FFFFFFFF", float:"Auto"}}
                       onChange={this.handleChange}
+                      id="inputCard"
                     >
                         
                         <h2>Number of points(n)</h2><Input size="large" name="Points" style={InputColor}></Input><br/><br/>
                         <Button id="dimention_button" onClick= {
                                 ()=> this.createTableInput(parseInt(this.state.Points), parseInt(this.state.m))}
-                                style={{width: 150 , height:50,background: "#4caf50", color: "white", fontSize: "30px"}}>
+                                style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}>
                                 Submit<br></br>
                             </Button>
                                                 

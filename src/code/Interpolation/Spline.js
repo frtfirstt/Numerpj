@@ -187,17 +187,12 @@ class Appc extends Component {
             <Router>
                 <Layout>
                     <Content
-                        style={{
-                            background: '#FFCC66',
-                            padding: 24,
-                            margin: 30,
-                            minHeight: 280,
-                            fontSize: 24
-                        }}
+                        style={{ background: "#ebe18d", padding: "90px" , float:"left"}}
                         onChange={this.handleChange}
                     >
                         <Row gutter={[40, 40]}
                         >
+                            
                             <Col span={10} offset={7}>
                                 {this.state.showTableInput &&
                                     <div>
@@ -208,6 +203,7 @@ class Appc extends Component {
 
                                 {this.state.showInputForm &&
                                     <div>
+                                        <h2 style={{color: "#003a8c", fontWeight: "bold",fontSize: "35px",textAlign:"center"}}>Spline</h2>
                                         <h2>Number of points(n)</h2><Input size="large" name="nPoints"></Input>
                                         <h2>X</h2><Input size="large" name="X"></Input>
                                     </div>
@@ -217,7 +213,7 @@ class Appc extends Component {
                                     <Button id="dimention_button" onClick={
                                         () => { this.createTableInput(parseInt(this.state.nPoints)) }
                                     }
-                                        style={{ fontSize: "20px" }}>
+                                    style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}>
                                         Submit<br></br>
                                     </Button>
                                 }
