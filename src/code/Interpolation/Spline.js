@@ -185,7 +185,7 @@ class Appc extends Component {
     }
 
     async dataapi() {
-        await axios({method: "get",url: "http://localhost:5000/database/spline",}).then((response) => {console.log("response: ", response.data);api = response.data;});
+        await axios({method: "get",url: "http://localhost:5000/data/spline",}).then((response) => {console.log("response: ", response.data);api = response.data;});
         await this.setState({
         nPoints:api.numberpoint,
           X:api.xfind,

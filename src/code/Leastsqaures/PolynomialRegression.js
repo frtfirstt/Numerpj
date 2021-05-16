@@ -165,7 +165,7 @@ class PolynomialRegression extends Component {
         return sum
     }
     async dataapi() {
-        await axios({method: "get",url: "http://localhost:5000/database/polynomial",}).then((response) => {console.log("response: ", response.data);api = response.data;});
+        await axios({method: "get",url: "http://localhost:5000/data/polynomial",}).then((response) => {console.log("response: ", response.data);api = response.data;});
         await this.setState({
         Points:api.numberpoint,
           X:api.xfind,
@@ -235,7 +235,7 @@ class PolynomialRegression extends Component {
 
                    
                 </div>
-                
+                <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
                 <div>
                 {this.state.showanswer &&
                         <Card

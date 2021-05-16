@@ -136,7 +136,7 @@ class Appc3 extends Component {
     }
 
     async dataapi() {
-        await axios({method: "get",url: "http://localhost:5000/database/gauss",}).then((response) => {console.log("response: ", response.data);api = response.data;});
+        await axios({method: "get",url: "http://localhost:5000/data/gauss",}).then((response) => {console.log("response: ", response.data);api = response.data;});
         await this.setState({
             row: api.row,
             column: api.row,

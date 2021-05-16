@@ -127,7 +127,7 @@ class FalsePosition extends Component {
         });
     }
     async dataapi() {
-        await axios({method: "get",url: "http://localhost:5000/database/falseposition",}).then((response) => {console.log("response: ", response.data);api = response.data;});
+        await axios({method: "get",url: "http://localhost:5000/data/falseposition",}).then((response) => {console.log("response: ", response.data);api = response.data;});
         await this.setState({
             fx:api.fx,
           xl:api.xl,

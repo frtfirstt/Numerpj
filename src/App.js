@@ -24,13 +24,13 @@ import GuassJordan from './code/Linear/GuassJordan';
 import LU from './code/Linear/LU';
 import Cholesky from './code/Linear/Cholesky';
 import Jacobi from './code/Linear/Jacobi';
-import Conjugate from './code/Linear/Conjugate';
+// import Conjugate from './code/Linear/Conjugate';
 
 import Lagrange from './code/Interpolation/Lagrange';
 import Spline from './code/Interpolation/Spline';
 
 import LinearRegression from './code/Leastsqaures/LinearRegression';
-import Multiple_LinearRegression from './code/Leastsqaures/Multiple_LinearRegression';
+// import Multiple_LinearRegression from './code/Leastsqaures/Multiple_LinearRegression';
 import PolynomialRegression from './code/Leastsqaures/PolynomialRegression';
 
 

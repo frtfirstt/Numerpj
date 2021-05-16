@@ -112,7 +112,7 @@ class Cramerrule extends Component {
         }
     }
     async dataapi() {
-        await axios({method: "get",url: "http://localhost:5000/database/cramer",}).then((response) => {console.log("response: ", response.data);api = response.data;});
+        await axios({method: "get",url: "http://localhost:5000/data/cramer",}).then((response) => {console.log("response: ", response.data);api = response.data;});
         await this.setState({
             row: api.row,
             column: api.row,

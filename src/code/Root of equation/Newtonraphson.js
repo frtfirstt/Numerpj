@@ -110,7 +110,7 @@ class Newton extends Component {
         });
     }
     async dataapi() {
-        await axios({method: "get",url: "http://localhost:5000/database/newtonraphson",}).then((response) => {console.log("response: ", response.data);api = response.data;});
+        await axios({method: "get",url: "http://localhost:5000/data/newtonraphson",}).then((response) => {console.log("response: ", response.data);api = response.data;});
         await this.setState({
             fx:api.fx,
           x0:api.x0

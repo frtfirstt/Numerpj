@@ -145,7 +145,7 @@ class LinearRegression extends Component {
     }
 
     async dataapi() {
-        await axios({method: "get",url: "http://localhost:5000/database/linear",}).then((response) => {console.log("response: ", response.data);api = response.data;});
+        await axios({method: "get",url: "http://localhost:5000/data/linear",}).then((response) => {console.log("response: ", response.data);api = response.data;});
         await this.setState({
         Points:api.numberpoint,
           X:api.xfind
@@ -213,7 +213,7 @@ class LinearRegression extends Component {
                     
 
                    
-                </div>
+                </div><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
                 <div>
                     {this.state.showAnswer &&
                         <Card

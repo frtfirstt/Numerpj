@@ -153,7 +153,7 @@ class Bisection extends Component {
             
     //     }
         async dataapi() {
-            await axios({method: "get",url: "http://localhost:5000/database/bisection",}).then((response) => {console.log("response: ", response.data);api = response.data;});
+            await axios({method: "get",url: "http://localhost:5000/data/bisection",}).then((response) => {console.log("response: ", response.data);api = response.data;});
             await this.setState({
                 fx:api.fx,
               xl:api.xl,

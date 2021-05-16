@@ -142,7 +142,7 @@ class Lagrange extends Component {
     }
 
     async dataapi() {
-        await axios({method: "get",url: "http://localhost:5000/database/lagrange",}).then((response) => {console.log("response: ", response.data);api = response.data;});
+        await axios({method: "get",url: "http://localhost:5000/data/lagrange",}).then((response) => {console.log("response: ", response.data);api = response.data;});
         await this.setState({
         Point:api.numberpoint,
           X:api.xfind,
