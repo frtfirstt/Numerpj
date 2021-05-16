@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {Card, Input, Button, Table} from 'antd';
 import 'antd/dist/antd.css';
 import {  sum,inv,multiply } from 'mathjs';
-
+import axios from 'axios';
 const InputColor = {
     background: "",
     color: "#003a8c", 
@@ -13,6 +13,7 @@ const InputColor = {
     
 
 };
+var api
 var table = [
     {
         title: "No.",
@@ -142,6 +143,22 @@ class LinearRegression extends Component {
         }
         return sum
     }
+
+    async dataapi() {
+        await axios({method: "get",url: "http://localhost:5000/database/linear",}).then((response) => {console.log("response: ", response.data);api = response.data;});
+        await this.setState({
+        Points:api.numberpoint,
+          X:api.xfind
+          
+        })
+        this.createTableInput(parseInt(this.state.Points))
+        for (var i = 0; i < this.state.Points; i++) {
+            document.getElementById("x" + (i + 1)).value = api.arrayX[i];
+            document.getElementById("y" + (i + 1)).value = api.arrayY[i];
+        }
+        this.Valueinarray(parseInt(this.state.Points))
+        this.LinearRegression(parseInt(this.state.Points))
+      }
     handleChange(event) {
         this.setState({
             [event.target.name]: event.target.value
@@ -161,7 +178,7 @@ class LinearRegression extends Component {
                         
                         <h2>Number of points(n)</h2><Input size="large" name="Points" style={InputColor}></Input><br/><br/>
                         <Button id="dimention_button" onClick= {
-                                ()=> this.createTableInput(parseInt(this.state.Points), parseInt(this.state.m))}
+                                ()=> this.createTableInput(parseInt(this.state.Points))}
                                 style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}>
                                 Submit<br></br>
                             </Button>
@@ -184,10 +201,20 @@ class LinearRegression extends Component {
                                 Submit
                             </Button>
                         }
+                        <Button id="submit_button" onClick= {
+                                
+                                ()=>this.dataapi()
+                        }  
+                        style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}>API</Button>
                         
                     </Card>
                     
+                    
+                    
 
+                   
+                </div>
+                <div>
                     {this.state.showAnswer &&
                         <Card
                         title={"Output"}
@@ -197,9 +224,7 @@ class LinearRegression extends Component {
                             <p style={{fontSize: "24px", fontWeight: "bold"}}>x = {JSON.stringify(answer)}</p> 
                         </Card>                        
                     }
-
-                   
-                </div>
+                    </div>
 
                 
             </body>

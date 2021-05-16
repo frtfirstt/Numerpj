@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {Card, Input, Button, Table} from 'antd';
-
+import axios from 'axios';
 import 'antd/dist/antd.css';
 const InputColor = {
     background: "",
@@ -12,6 +12,7 @@ const InputColor = {
     
 
 };
+var api
 var table = [
     {
       title: "No.",
@@ -95,10 +96,9 @@ class Lagrange extends Component {
     }
     
     datainValue() {
-        x = []
-        y = []
         for (var i=1 ; i<=this.state.Point ; i++) {
             x[i] = parseFloat(document.getElementById("x"+i).value);
+            
             y[i] = parseFloat(document.getElementById("y"+i).value);
         }
     }
@@ -111,6 +111,8 @@ class Lagrange extends Component {
 
                 fraction2 = fraction2 *(x[i] - x[nn]);
             }
+            // console.log(x[i])
+            // console.log(fraction2)
         } 
         
         return parseFloat(fraction1/fraction2);
@@ -119,9 +121,13 @@ class Lagrange extends Component {
     lagrange(n, X) {
         fx = 0
         this.datainValue()
+        console.log(n)
+        console.log(X)
         for (var i=1 ; i<=n ; i++) {
             fx =fx + this.llagrangeI(X, i, n)*y[i];
+            
         }
+        
         this.setState({
             showanswer: true
         })
@@ -135,16 +141,35 @@ class Lagrange extends Component {
         });
     }
 
+    async dataapi() {
+        await axios({method: "get",url: "http://localhost:5000/database/lagrange",}).then((response) => {console.log("response: ", response.data);api = response.data;});
+        await this.setState({
+        Point:api.numberpoint,
+          X:api.xfind,
+          interpolatePoint:api.interpolateinput,
+          x:api.arrayX,
+          y:api.arrayY
+          
+        })
+        this.createTableInput(this.state.Point)
+        for (var i = 0; i < this.state.Point; i++) {
+            document.getElementById("x" + (i + 1)).value = api.arrayX[i];
+            document.getElementById("y" + (i + 1)).value = api.arrayY[i];
+        }
+        this.lagrange(parseInt(this.state.interpolatePoint), parseFloat(this.state.X))
+      }
+
     render() {
         return(
             <body style={{ background: "#ebe18d", padding: "90px" , float:"left"}}>
                      <h2 style={{color: "#003a8c", fontWeight: "bold",fontSize: "35px",textAlign:"center"}}>Lagrange</h2>
                 <div style={{textAlign:"center"}}>
-                    {/* <Card
+                    <Card
                       bordered={true}
-                      style={{ width: 700 ,height:600, background: "#40a9ff", color: "#FFFFFFFF", float:"Auto"}}
+                      style={{ width: 1500 ,height:600, background: "#ebe18d", color: "#FFFFFFFF", float:"Auto"}}
                       onChange={this.handleChange}
-                    > */}
+                      id="inputCard"
+                    >
                         {this.state.showMatrixinput && 
                         <div>
                             <Table columns={table} dataSource={schedul} pagination={false} bordered={true} bodyStyle={{fontWeight: "bold", fontSize: "18px", color: "white" , overflowY: "scroll", minWidth: 120, maxHeight: 300}}></Table>
@@ -175,8 +200,14 @@ class Lagrange extends Component {
                                 Submit
                             </Button>
                         }
+                        <Button id="submit_button" onClick= {
+                                
+                                ()=>this.dataapi()
+                        }  
+                        style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}>API</Button>
                         
-                    {/* </Card> */}
+                    </Card>
+                    
                     
 
                     {this.state.showanswer &&

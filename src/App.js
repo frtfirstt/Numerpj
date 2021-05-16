@@ -70,12 +70,12 @@ class App extends React.Component {
           <Menu.Item key="13">LU<Link to="/LU"></Link></Menu.Item>
           <Menu.Item key="14">Cholesky<Link to="/Cholesky"></Link></Menu.Item>
           <Menu.Item key="15">Jacobi<Link to="/Jacobi"></Link></Menu.Item>
-          <Menu.Item key="16">Conjugate<Link to="/Conjugate"></Link></Menu.Item>
+          {/* <Menu.Item key="16">Conjugate<Link to="/Conjugate"></Link></Menu.Item> */}
           
         </SubMenu>
 
         <SubMenu key="sub3" icon={<AppstoreOutlined />} title="Interpolation">
-          <Menu.Item key="17">Newton divided-differences<Link to="/bisection="></Link></Menu.Item>
+          {/* <Menu.Item key="17">Newton divided-differences<Link to="/bisection="></Link></Menu.Item> */}
           <Menu.Item key="18">Lagrange polynomials<Link to="/Lagrange"></Link></Menu.Item>
           <Menu.Item key="19">Spline interpolation<Link to="/Spline"></Link></Menu.Item>
         
@@ -84,7 +84,7 @@ class App extends React.Component {
         <SubMenu key="sub5" icon={<AppstoreOutlined />} title="Least sqaures Regresstion">
           <Menu.Item key="20">Linear Regression<Link to="/LinearRegression"></Link></Menu.Item>
           <Menu.Item key="21">polynomials Regresstion<Link to="/PolynomialRegression"></Link></Menu.Item>
-          <Menu.Item key="22">Multiple Linear Regression<Link to="/Multiple_LinearRegression"></Link></Menu.Item>
+          {/* <Menu.Item key="22">Multiple Linear Regression<Link to="/Multiple_LinearRegression"></Link></Menu.Item> */}
         
         </SubMenu>
       </Menu>
@@ -102,11 +102,11 @@ class App extends React.Component {
           <Route path="/LU" component={LU}></Route>  
           <Route path="/Cholesky" component={Cholesky}></Route>  
           <Route path="/Jacobi" component={Jacobi}></Route>  
-          <Route path="/Conjugate" component={Conjugate}></Route>  
+          {/* <Route path="/Conjugate" component={Conjugate}></Route>   */}
           <Route path="/Lagrange" component={Lagrange}></Route>  
           <Route path="/Spline" component={Spline}></Route>  
           <Route path="/LinearRegression" component={LinearRegression}></Route>  
-          <Route path="/Multiple_LinearRegression" component={Multiple_LinearRegression}></Route>  
+          {/* <Route path="/Multiple_LinearRegression" component={Multiple_LinearRegression}></Route>   */}
           <Route path="/PolynomialRegression" component={PolynomialRegression}></Route>  
         </Content>
       </Layout>

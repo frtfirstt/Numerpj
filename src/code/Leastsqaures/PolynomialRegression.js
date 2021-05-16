@@ -3,7 +3,8 @@ import {Card, Input, Button, Table} from 'antd';
 
 import 'antd/dist/antd.css';
 import {  squeeze,sum,lusolve } from 'mathjs';
-
+import axios from 'axios';
+var api
 const InputColor = {
     background: "",
     color: "#003a8c", 
@@ -163,6 +164,21 @@ class PolynomialRegression extends Component {
         }
         return sum
     }
+    async dataapi() {
+        await axios({method: "get",url: "http://localhost:5000/database/polynomial",}).then((response) => {console.log("response: ", response.data);api = response.data;});
+        await this.setState({
+        Points:api.numberpoint,
+          X:api.xfind,
+          m:api.ordernumber
+        })
+        this.createTableInput(parseInt(this.state.Points), parseInt(this.state.m))
+        for (var i = 0; i < this.state.Points; i++) {
+            document.getElementById("x" + (i + 1)).value = api.arrayX[i];
+            document.getElementById("y" + (i + 1)).value = api.arrayY[i];
+        }
+        this.Valueinarray(parseInt(this.state.Points), parseInt(this.state.m)); 
+        this.PolynomialRegression(parseInt(this.state.Points), parseInt(this.state.m))
+      }
     handleChange(event) {
         this.setState({
             [event.target.name]: event.target.value
@@ -208,11 +224,20 @@ class PolynomialRegression extends Component {
                                 
                             </Button>
                         }
+                        <Button id="submit_button" onClick= {
+                                
+                                ()=>this.dataapi()
+                        }  
+                        style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}>API</Button>
+                        
                         
                     </Card>
-                    
 
-                    {this.state.showanswer &&
+                   
+                </div>
+                
+                <div>
+                {this.state.showanswer &&
                         <Card
                         title={"Output"}
                         bordered={true}
@@ -221,8 +246,6 @@ class PolynomialRegression extends Component {
                             <p style={{fontSize: "24px", fontWeight: "bold"}}>x = {JSON.stringify(answer).replace(',', '\n')}</p> 
                         </Card>                        
                     }
-
-                   
                 </div>
 
                 

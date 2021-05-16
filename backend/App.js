@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
-const database = require("./database.json");
+const database = require("./data.json");
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -54,11 +54,11 @@ app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
  *        description: A successful response
  */
 app.get("/database",  (req, res) => {
-  res.json(database);
+  res.json(data);
 });
 
-app.get("/database/:name", (req, res) => {
-  const resalt = database.filter(database => database.name == req.params.name)
+app.get("/data/:name", (req, res) => {
+  const resalt = data.filter(data => data.name == req.params.name)
   if(resalt.length > 0){
     res.json(resalt[0])
   }else{

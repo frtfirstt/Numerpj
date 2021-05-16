@@ -4,7 +4,9 @@ import 'antd/dist/antd.css';
 import { compile } from 'mathjs';
 import { Layout, Breadcrumb } from 'antd';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import axios from 'axios';
 const { Header, Content, Footer, Sider } = Layout;
+
 const InputStyle = {
     background: "#1890ff",
     color: "white",
@@ -12,6 +14,7 @@ const InputStyle = {
     fontSize: "24px"
 
 };
+var api
 var columns = [
     {
         title: "No.",
@@ -87,8 +90,6 @@ class Appc extends Component {
         })
     }
     initialValue(X) {
-        x = []
-        y = []
         for (var i = 0; i < this.state.nPoints; i++) {
             x[i] = parseFloat(document.getElementById("x" + (i + 1)).value);
             y[i] = parseFloat(document.getElementById("y" + (i + 1)).value);
@@ -182,6 +183,25 @@ class Appc extends Component {
             [event.target.name]: event.target.value
         });
     }
+
+    async dataapi() {
+        await axios({method: "get",url: "http://localhost:5000/database/spline",}).then((response) => {console.log("response: ", response.data);api = response.data;});
+        await this.setState({
+        nPoints:api.numberpoint,
+          X:api.xfind,
+          
+          x:api.arrayX,
+          y:api.arrayY
+          
+        })
+        this.createTableInput(this.state.nPoints)
+        for (var i = 0; i < this.state.nPoints; i++) {
+            document.getElementById("x" + (i + 1)).value = api.arrayX[i];
+            document.getElementById("y" + (i + 1)).value = api.arrayY[i];
+        }
+        this.initialValue(parseFloat(this.state.X))
+      }
+
     render() {
         return (
             <Router>
@@ -216,7 +236,9 @@ class Appc extends Component {
                                     style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}>
                                         Submit<br></br>
                                     </Button>
+
                                 }
+
                                 {this.state.showTableButton &&
                                     <Button
                                         id="matrix_button"
@@ -225,7 +247,13 @@ class Appc extends Component {
                                         Submit
                             </Button>
                                 }
+                                
                             </Col>
+                            <Button id="submit_button" onClick= {
+                                
+                                ()=>this.dataapi()
+                        }  
+                        style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}>API</Button>
                                 
                         </Row>
                         {/*-----------------------------------------ปุ่มINPUTสมการ----------------------------------------------------*/}
