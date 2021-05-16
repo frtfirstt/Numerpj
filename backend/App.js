@@ -31,27 +31,27 @@ app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 // Routes
 /**
  * @swagger
- * /database:
+ * /data:
  *  get:
  *    tags : ["Example"]
- *    description: Use to request all customers
+ *    description: Json ทั้งหมด
  *    responses:
  *      '200':
- *        description: A successful response
+ *        description: อ่าน Api สำเร็จ
  */
 /**
  * @swagger
- * /database/{name}:
+ * /data/{name}:
  *  get:
  *    tags : ["Example"]
  *    parameters:
  *       - name: name
  *         in: path
  *         required: true
- *    description: Use to request all customers
+ *    description: Json บางส่วน
  *    responses:
  *      '200':
- *        description: A successful response
+ *        description: อ่าน Api สำเร็จ
  */
 app.get("/data",  (req, res) => {
   res.json(data);

@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
 import './index.css';
 import { Menu } from 'antd';
@@ -39,10 +38,6 @@ import PolynomialRegression from './code/Leastsqaures/PolynomialRegression';
 const { SubMenu } = Menu;
 
 class App extends React.Component {
-  handleClick = e => {
-    console.log('click ', e);
-  };
-
   render() {
     return (
       <Router>

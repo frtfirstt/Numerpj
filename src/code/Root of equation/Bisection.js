@@ -155,7 +155,7 @@ class Bisection extends Component {
         async dataapi() {
             await axios({method: "get",url: "http://localhost:5000/data/bisection",}).then((response) => {console.log("response: ", response.data);api = response.data;});
             await this.setState({
-                fx:api.fx,
+              fx:api.fx,
               xl:api.xl,
               xr:api.xr
             })
@@ -171,7 +171,7 @@ class Bisection extends Component {
                     <Card
                     
                     bordered={true}
-                    style={{ width: 1500 ,height:600, background: "#ebe18d", color: "#FFFFFFFF", float:"Auto"}}
+                    style={{ width: "100%" ,height:600, background: "#ebe18d", color: "#FFFFFFFF", float:"Auto"}}
                     onChange={this.handleChange}
                     id="inputCard"
                     >
