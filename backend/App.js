@@ -10,7 +10,7 @@ const swaggerOptions = {
   swaggerDefinition: {
     info: {
       version: "1.0.0",
-      title: "Example API",
+      title: "phantira Swagger",
       description: "Project API Information",
       servers: ["http://localhost:5000"]
     }
@@ -68,4 +68,6 @@ app.get("/data/:name", (req, res) => {
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
+  console.log(`Example app listening at http://localhost:${port}/swagger`);
+  console.log(`Example app listening at http://localhost:${port}/data`);
 });

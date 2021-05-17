@@ -125,7 +125,7 @@ class Secant extends Component {
                 <div style={{textAlign:"center"}}>
                     <Card
                     bordered={true}
-                    style={{ width: 1500 ,height:600, background: "#ebe18d", color: "#FFFFFFFF", float:"Auto"}}
+                    style={{ width: "100%" ,height:600, background: "#ebe18d", color: "#FFFFFFFF", float:"Auto"}}
                     onChange={this.handleChange}
                     >
                         <h2>f(x)</h2><Input size="large" name="fx" value={this.state.fx} style={InputColor}></Input><br/><br/><br/><br/>

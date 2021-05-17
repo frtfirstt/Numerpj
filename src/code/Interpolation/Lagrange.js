@@ -166,8 +166,8 @@ class Lagrange extends Component {
                 <div style={{textAlign:"center"}}>
                     <Card
                       bordered={true}
-                      style={{ width: 1500 ,height:600, background: "#ebe18d", color: "#FFFFFFFF", float:"Auto"}}
-                      onChange={this.handleChange}
+                      style={{ width: "100%" ,height:600, background: "#ebe18d", color: "#FFFFFFFF", float:"Auto"}}
+                        onChange={this.handleChange}
                       id="inputCard"
                     >
                         {this.state.showMatrixinput && 
