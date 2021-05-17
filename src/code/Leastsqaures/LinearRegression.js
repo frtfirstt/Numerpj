@@ -122,7 +122,7 @@ class LinearRegression extends Component {
         }
         Ymatrix[0] = sum(y)
         Ymatrix[1] = this.sumXY(x, y)
-        Xmatrix = inv(Xmatrix)
+        // Xmatrix = inv(Xmatrix)
         answer = JSON.stringify(multiply(Xmatrix, Ymatrix))
 
         this.setState({

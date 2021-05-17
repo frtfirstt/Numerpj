@@ -69,7 +69,7 @@ class Lagrange extends Component {
             }}
             id={"x"+i} key={"x"+i} placeholder={"x"+i}/>);
             y.push(<Input style={{
-
+        
                 width: "100%",
                 height: "50%", 
                 backgroundColor:"#003a8c", 

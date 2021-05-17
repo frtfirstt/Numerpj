@@ -222,7 +222,7 @@ class PolynomialRegression extends Component {
                                 Submit
 
                                 
-                            </Button>
+                            </Button> //2
                         }
                         <Button id="submit_button" onClick= {
                                 
