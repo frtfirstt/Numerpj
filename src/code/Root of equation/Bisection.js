@@ -136,6 +136,7 @@ class Bisection extends Component {
         this.setState({
             [event.target.name]: event.target.value
         });
+        // console.log("aaaa")
 
     }
 
@@ -192,6 +193,7 @@ class Bisection extends Component {
                         }  
                         style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}>API</Button>
                         
+
                         
                     </Card>
                      

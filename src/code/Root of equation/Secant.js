@@ -25,8 +25,8 @@ const table = [
     },
     {
         title: "Xnew",
-        dataIndex: "xnew",
-        key: "xnew"
+        dataIndex: "y",
+        key: "y"
     },
     
     {

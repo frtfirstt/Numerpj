@@ -26,11 +26,11 @@ class Cramerrule extends Component {
         this.state = {
             row: parseInt(0),
             column: parseInt(0),
-            showDimentionForm: true,
+            // showDimentionForm: true,
             showDimentionButton: true,
             showMatrixForm: false,
-            showMatrixButton: false,
-            showOutputCard: false
+            showMatrixButton: false
+            // showOutputCard: false
         }
         this.handleChange = this.handleChange.bind(this);
         this.cramer = this.cramer.bind(this);
@@ -63,9 +63,9 @@ class Cramerrule extends Component {
 
 
         }
-        this.setState({
-            showOutputCard: true
-        });
+        // this.setState({
+        //     showOutputCard: true
+        // });
 
 
     }
@@ -97,7 +97,7 @@ class Cramerrule extends Component {
         }
 
         this.setState({
-            showDimentionForm: false,
+            // showDimentionForm: false,
             showDimentionButton: false,
             showMatrixForm: true,
             showMatrixButton: true

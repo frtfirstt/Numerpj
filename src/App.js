@@ -1,11 +1,10 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import './index.css';
+import './index.css'; 
 import { Menu } from 'antd';
 import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
 import {
   BrowserRouter as Router,
-  Switch,
   Route,
   Link
 } from "react-router-dom";
@@ -44,7 +43,7 @@ class App extends React.Component {
       <Layout>
       <Sider width={250}>
       <Menu
-        onClick={this.handleClick}
+      
         style={{ width: 256 }}
         defaultSelectedKeys={['1']}
         defaultOpenKeys={['sub1']}

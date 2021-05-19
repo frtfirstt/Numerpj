@@ -41,9 +41,19 @@ app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
  */
 /**
  * @swagger
- * /data/{name}:
+ * /data2:
  *  get:
  *    tags : ["Example"]
+ *    description: Json ทั้งหมด
+ *    responses:
+ *      '200':
+ *        description: อ่าน Api สำเร็จ
+ */
+/**
+ * @swagger
+ * /data/{name}:
+ *  get:
+ *    tags : ["Example2"]
  *    parameters:
  *       - name: name
  *         in: path
@@ -57,11 +67,16 @@ app.get("/data",  (req, res) => {
   res.json(data);
 });
 
+app.get("/data2",  (req, res) => {
+  res.json(data);
+});
+
 app.get("/data/:name", (req, res) => {
-  const resalt = data.filter(data => data.name == req.params.name)
+  const resalt = data.filter(function(data){return data.name == req.params.name})
+  console.log(resalt.length)
   if(resalt.length > 0){
-    res.json(resalt[0])
-  }else{
+    res.json(resalt)
+ }else{
     res.json({})
   }
 });
