@@ -3,6 +3,19 @@ import {Card, Input, Button, Table} from 'antd';
 import 'antd/dist/antd.css';
 import {  sum,inv,multiply } from 'mathjs';
 import axios from 'axios';
+import {
+    ResponsiveContainer,
+    ComposedChart,
+    Line,
+    LineChart,
+    Bar,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    Legend,
+  } from 'recharts';
+  
 const InputColor = {
     background: "",
     color: "#003a8c", 
@@ -31,7 +44,8 @@ var table = [
         key: "y"
     }
 ];
-
+var schedule = []
+var schedule2= []
 var x, y, tableinput, answer
 
 class LinearRegression extends Component {
@@ -45,9 +59,10 @@ class LinearRegression extends Component {
         this.state = {
             Points: 0,
             m: 0,
-            showinput: false,
-            showbutton: false,
-            showAnswer: false
+            showinput: false, //table
+            showbutton: false, //sub2
+            showAnswer: false,
+            showgraph : false
         }
         this.handleChange = this.handleChange.bind(this);
       
@@ -98,6 +113,10 @@ class LinearRegression extends Component {
         for (i=1 ; i<=n ; i++) {
             y[i] = parseFloat(document.getElementById("y"+i).value);
         }
+        // for (i=1 ; i<=n ; i++) {
+        //     schedule.push({x:x[i],y:y[i]})
+        // }
+       
     }
     LinearRegression(n) {
         var Xmatrix = [2], Ymatrix = [2]
@@ -122,17 +141,34 @@ class LinearRegression extends Component {
         }
         Ymatrix[0] = sum(y)
         Ymatrix[1] = this.sumXY(x, y)
-        // Xmatrix = inv(Xmatrix)
-        answer = JSON.stringify(multiply(Xmatrix, Ymatrix))
+        Xmatrix = inv(Xmatrix)
+        answer = JSON.stringify(multiply(Xmatrix, Ymatrix)) //arr string
+        console.log(answer)
+        var ans2=multiply(Xmatrix, Ymatrix)
+        for(var i=1;i<x.length;i++){
+            schedule2.push({
+                x:x[i],
+                y:y[i],
+                ans:ans2[0]+(ans2[1]*x[i])})
+                
+        }
+        console.log(schedule2)
+       
+        
+        
+        
 
         this.setState({
-            showAnswer: true
-        })        
+            showAnswer: true,
+            showgraph : true
+        })
+         
     }
     sumxpow(A ,Powers) {
         var sum = 0
         for (var i=1 ; i<A.length ; i++) {
             sum = sum + Math.pow(A[i], Powers)
+            
         }
         return sum       
     }
@@ -140,6 +176,7 @@ class LinearRegression extends Component {
         var sum = 0
         for (var i=1 ; i<A.length ; i++) {
             sum = sum + A[i]*B[i]
+            
         }
         return sum
     }
@@ -226,7 +263,22 @@ class LinearRegression extends Component {
                     }
                     </div>
 
+                    
+                       {this.state.showgraph &&
+                        <LineChart width={760} height={280} data={schedule2}
+                        margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                        <XAxis dataKey="x" />
+                        <YAxis dataKey="y"/>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <Tooltip />
+                        <Legend verticalAlign="top" height={36} />
+                        <Line name="y=a0+(a1*x)" type="monotone" dataKey="ans" stroke="#ff7300" />
+                        <Line name="y" type="monotone" dataKey="y" stroke="#8884d8" />
+                    </LineChart>                      
+                    }
                 
+               
+                    
             </body>
         );
     }

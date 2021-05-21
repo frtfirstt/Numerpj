@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Card, Input, Button, Table, AutoComplete} from 'antd';
+import {Card, Input, Button, Table} from 'antd';
 
 import { LineChart, Line ,XAxis,CartesianGrid,Tooltip,Legend,YAxis} from 'recharts';
 import 'antd/dist/antd.css';
@@ -127,9 +127,10 @@ class Bisection extends Component {
     func(datastr) {
         
         var comfunc = compile(this.state.fx)
+        // console.log(comfunc)
         let data = {x:parseFloat(datastr)}
         return comfunc.evaluate(data)       
-    } //การเอาค่าไปแทนในฟังก์ชั่น
+    } 
 
     
     handleChange(event) {
@@ -158,8 +159,10 @@ class Bisection extends Component {
             await this.setState({
               fx:api.fx,
               xl:api.xl,
-              xr:api.xr
+              xr:api.xr,
+           
             })
+            
             this.bisection(this.state.xl,this.state.xr)
           }
     render() {
@@ -181,13 +184,13 @@ class Bisection extends Component {
                         <h2>X<sub>L</sub></h2>{this.state.inputs &&<Input size="large" name="xl"value={this.state.xl} id ="xl" style={InputColor}></Input>}<br/><br/><br/><br/>
                         <h2>X<sub>R</sub></h2>{this.state.inputs &&<Input size="large" name="xr"value={this.state.xr} id ="xr" style={InputColor}></Input>}<br/><br/><br/><br/>
                         
-                        <Button id="submit_button" onClick= {
+                        <Button onClick= {
 
                                 ()=>this.bisection(parseFloat(this.state.xl), parseFloat(this.state.xr))
                             }  
                         style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}>GO</Button>&nbsp;&nbsp;&nbsp;&nbsp;
 
-                        <Button id="submit_button" onClick= {
+                        <Button  onClick= {
                                 
                                 ()=>this.dataapi()
                         }  
@@ -204,7 +207,7 @@ class Bisection extends Component {
                         title={"Output"}
                         bordered={true}
                         style={{width: "100%", background: "#2196f3", color: "#FFFFFFFF", float:"inline-start", marginBlockStart:"2%"}}
-                        id="outputCard"
+                        
                         >
                             <Table columns={table} dataSource={schedule}  bodyStyle={{background: "#65b7f3",fontWeight: "bold", fontSize: "18px", color: "black"}}
                             ></Table>

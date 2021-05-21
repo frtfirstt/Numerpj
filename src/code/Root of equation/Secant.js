@@ -59,14 +59,14 @@ class Secant extends Component {
         var data = []
         data['xnew'] = []
         data['error'] = []
-        x.push(x0);
-        x.push(x1);
+        x.push(x0); //0
+        x.push(x1);//1
         data['xnew'][0] = x0;
         data['error'][0] = "---";
 
         do {
             xnew  = x[i] - (this.func(this.state.fx,x[i]) *(x[i]-x[i-1])) / (this.func(this.state.fx, x[i]) - this.func(this.state.fx, x[i-1]));
-            x.push(xnew );
+            x.push(xnew );//2
             epsilon = Math.abs((xnew-x[i]) / xnew);
             data['xnew'][n] = xnew.toFixed(8);
             data['error'][n] = Math.abs(epsilon).toFixed(8);
@@ -85,10 +85,10 @@ class Secant extends Component {
     }
     createTable(y, error) {
         schedule = []
-        console.log(y)
+        // console.log(y)
         for (var i = 0; i < y.length; i++) {
             schedule.push({
-                key:i,
+                // key:i,
                 iteration: i + 1,
                 y: y[i],
                 error: error[i]
@@ -97,8 +97,8 @@ class Secant extends Component {
 
     }
     func = (fx, X) => {
-        var expr = compile(fx); // f(x)
-        let scope = { x: parseFloat(X) }; //f(x) ; x=input
+        var expr = compile(fx); 
+        let scope = { x: parseFloat(X) }; 
         return expr.evaluate(scope);
     }
     

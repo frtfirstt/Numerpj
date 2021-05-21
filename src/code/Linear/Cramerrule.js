@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 
 import { Menu, Input, Row, Col, Button, Card, Table } from 'antd';
-// import { Carousel } from 'antd';
+import { Carousel } from 'antd';
 import { Layout, Breadcrumb } from 'antd';
 import { range, compile, lusolve, format ,det} from 'mathjs';
-// import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'recharts';
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import axios from 'axios';
 const { Header, Content, Footer, Sider } = Layout;
@@ -26,11 +26,11 @@ class Cramerrule extends Component {
         this.state = {
             row: parseInt(0),
             column: parseInt(0),
-            // showDimentionForm: true,
-            showDimentionButton: true,
-            showMatrixForm: false,
-            showMatrixButton: false
-            // showOutputCard: false
+            
+            showDimentionButton: true, //Submit
+            showMatrixForm: false, //matrix
+            showMatrixButton: false, //submit
+            showOutputCard: false
         }
         this.handleChange = this.handleChange.bind(this);
         this.cramer = this.cramer.bind(this);
@@ -40,16 +40,13 @@ class Cramerrule extends Component {
     cramer() {
         this.initMatrix();
         var counter = 0;
-        // eslint-disable-next-line eqeqeq
+        
         while (counter != this.state.row) {
-            var transformMatrix = JSON.parse(JSON.stringify(A));//เก็บmatrix json
-            // console.log(JSON.parse(JSON.stringify(A)))
-            // console.log(A)
+            var transformMatrix = JSON.parse(JSON.stringify(A));
             for (var i = 0; i < this.state.row; i++) {
                 for (var j = 0; j < this.state.column; j++) {
                     if (j === counter) {
                         transformMatrix[i][j] = B[i]
-                        // console.log(transformMatrix)
                         break;
                     }
 
@@ -63,9 +60,9 @@ class Cramerrule extends Component {
 
 
         }
-        // this.setState({
-        //     showOutputCard: true
-        // });
+        this.setState({
+            showOutputCard: true
+        });
 
 
     }
@@ -81,7 +78,7 @@ class Cramerrule extends Component {
                     fontSize: "18px",
                     fontWeight: "bold"
                 }}
-                    id={"a" + i + "" + j} key={"a" + i + "" + j} placeholder={"a" + i + "" + j} />)
+                    id={"a" + i + "" + j}  placeholder={"a" + i + "" + j} />)
             }
             matrixA.push(<br />)
             matrixB.push(<Input style={{
@@ -93,11 +90,11 @@ class Cramerrule extends Component {
                 fontSize: "18px",
                 fontWeight: "bold"
             }}
-                id={"b" + i} key={"b" + i} placeholder={"b" + i} />)
+                id={"b" + i}  placeholder={"b" + i} />)
         }
 
         this.setState({
-            // showDimentionForm: false,
+            
             showDimentionButton: false,
             showMatrixForm: true,
             showMatrixButton: true
@@ -107,7 +104,7 @@ class Cramerrule extends Component {
     }
     initMatrix() {
         for (var i = 0; i < this.state.row; i++) {
-            A[i] = []
+            A[i] = [] 
             for (var j = 0; j < this.state.column; j++) {
                 A[i][j] = (parseFloat(document.getElementById("a" + (i + 1) + "" + (j + 1)).value));
             }
@@ -118,15 +115,15 @@ class Cramerrule extends Component {
         await axios({method: "get",url: "http://localhost:5000/data/cramer",}).then((response) => {console.log("response: ", response.data);api = response.data;});
         await this.setState({
             row: api.row,
-            column: api.row, //เท่ากัน
+            column: api.row,
           });
-          
           matrixA = [];
           matrixB = [];
           await this.createMatrix(api.row, api.row);
           for (let i = 1; i <= api.row; i++) {
             for (let j = 1; j <= api.row; j++) {
-              document.getElementById("a" + i + "" + j).value = api.A[i - 1][j - 1];
+              document.getElementById("a" + i + "" + j).value =
+                api.A[i - 1][j - 1];
             }
             document.getElementById("b" + i).value = api.B[i - 1];
           }
@@ -173,8 +170,8 @@ class Cramerrule extends Component {
                                     <Button
                                         id="matrix_button"
                                         onClick={()=>this.cramer()} style={{width: 100 , height:50,background: "#003a8c", color: "white", fontSize: "25px"}}>
-                                        Submit
-                                    </Button>//2
+                                        submit
+                                    </Button>
                                 }
 
                                 <Button id="submit_button" onClick= {
@@ -209,7 +206,7 @@ class Cramerrule extends Component {
                                 <Card
                                     title={<h3>Output</h3>}
                                     bordered={true}
-                                    onChange={this.handleChange} id="answerCard">
+                                     >
                                     <p style={{ fontSize: "24px", fontWeight: "bold" }}>{answer}</p>
                                 </Card>
                             </Col>

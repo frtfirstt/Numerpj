@@ -8,9 +8,16 @@
     {
         "name": "bisection",
         "fx" : "(x^2)-13",
-        "xl" : 2,
-        "xr" : 3
+        "xl" : 0.5,
+        "xr" : 1
     },
+    {
+        "name": "bisection",
+        "fx" : "(x)-13",
+        "xl" : 2,
+        "xr" : 4
+    },
+
     {
         "name": "newtonraphson",
         "fx" : "(x^2)-7",

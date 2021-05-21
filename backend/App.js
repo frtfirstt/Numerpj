@@ -73,16 +73,17 @@ app.get("/data2",  (req, res) => {
 
 app.get("/data/:name", (req, res) => {
   const resalt = data.filter(function(data){return data.name == req.params.name})
-  console.log(resalt.length)
+  // console.log(resalt.length)
   if(resalt.length > 0){
-    res.json(resalt)
+    res.json(resalt[Math.floor(Math.random() * resalt.length)])
+    // console.log(Math.floor(Math.random() * resalt.length))
  }else{
     res.json({})
   }
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  // console.log(`Example app listening at http://localhost:${port}`);
   console.log(`Example app listening at http://localhost:${port}/swagger`);
   console.log(`Example app listening at http://localhost:${port}/data`);
 });

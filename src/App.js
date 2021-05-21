@@ -4,12 +4,12 @@ import './index.css';
 import { Menu } from 'antd';
 import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
 import {
-  BrowserRouter as Router,
+  BrowserRouter as Routers,
   Route,
   Link
 } from "react-router-dom";
 import Sider from 'antd/lib/layout/Sider';
-import Layout, { Content } from 'antd/lib/layout/layout';
+import Layout from 'antd/lib/layout/layout';
 import Bisection from './code/Root of equation/Bisection';
 import Falseposition from './code/Root of equation/False-position';
 import Onepoint from './code/Root of equation/One-pointIteration';
@@ -23,6 +23,7 @@ import LU from './code/Linear/LU';
 import Cholesky from './code/Linear/Cholesky';
 import Jacobi from './code/Linear/Jacobi';
 // import Conjugate from './code/Linear/Conjugate';
+//component
 
 import Lagrange from './code/Interpolation/Lagrange';
 import Spline from './code/Interpolation/Spline';
@@ -34,19 +35,17 @@ import PolynomialRegression from './code/Leastsqaures/PolynomialRegression';
 
 
 
-const { SubMenu } = Menu;
+const {SubMenu} = Menu;
 
 class App extends React.Component {
   render() {
     return (
-      <Router>
+      <Routers>
       <Layout>
       <Sider width={250}>
       <Menu
       
         style={{ width: 256 }}
-        defaultSelectedKeys={['1']}
-        defaultOpenKeys={['sub1']}
         mode="inline"
       >
       <SubMenu key="sub2" icon={<AppstoreOutlined />} title="Root of Eqaution">
@@ -84,7 +83,7 @@ class App extends React.Component {
       </Menu>
       </Sider>
       <Layout>
-        <Content>
+        
           <Route path="/bisection" component={Bisection}></Route>  
           <Route path="/False-position" component={Falseposition}></Route>  
           <Route path="/onepoint" component={Onepoint}></Route>  
@@ -102,10 +101,10 @@ class App extends React.Component {
           <Route path="/LinearRegression" component={LinearRegression}></Route>  
           {/* <Route path="/Multiple_LinearRegression" component={Multiple_LinearRegression}></Route>   */}
           <Route path="/PolynomialRegression" component={PolynomialRegression}></Route>  
-        </Content>
+      
       </Layout>
       </Layout>
-      </Router>
+      </Routers>
     );
   }
 }
